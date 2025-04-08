@@ -38,10 +38,10 @@ export default function BinCard({ bin }: BinCardProps) {
   if (storageHUType === "Carton") storageIcon = "📦";
   if (storageHUType === "Crate") storageIcon = "🗄️";
   
-  // For compact tooltips, shorten the category name if needed
-  const shortenedCategory = category && category.length > 10 
-    ? category.substring(0, 9) + "..." 
-    : category || "Uncategorized";
+  // Extract only the first word of the category for display
+  const firstWord = category 
+    ? category.split(' ')[0] 
+    : "Uncategorized";
   
   return (
     <div className={`${bgGradient} rounded-lg shadow-md overflow-hidden relative group hover:shadow-lg transition-all duration-300`}>
@@ -76,7 +76,7 @@ export default function BinCard({ bin }: BinCardProps) {
         </div>
         
         <div className="mt-0.5 text-[10px] font-medium bg-blue-100 text-blue-800 rounded px-1 py-px leading-tight w-full max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
-          {shortenedCategory}
+          {firstWord}
         </div>
       </div>
     </div>
