@@ -1,7 +1,16 @@
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { ChevronDown, ChevronUp, HelpCircle } from "lucide-react";
+import { 
+  Collapsible, 
+  CollapsibleContent, 
+  CollapsibleTrigger 
+} from "@/components/ui/collapsible";
+import { Button } from "@/components/ui/button";
 
 export default function Legend() {
+  const [isOpen, setIsOpen] = useState(false);
+  
   // Area types with icons and colors
   const areaTypes = [
     { name: "Inventory", icon: "📦", color: "bg-gradient-to-r from-blue-500 to-indigo-600" },
@@ -33,87 +42,101 @@ export default function Legend() {
   ];
   
   return (
-    <Card className="mb-6 shadow-lg border-0 overflow-hidden">
-      <div className="bg-gradient-to-r from-slate-800 to-slate-900 text-white p-4">
-        <h3 className="text-base font-bold flex items-center gap-2">
-          <span>📋</span> Warehouse Legend
-        </h3>
-      </div>
-      
-      <CardContent className="p-5">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Bin Utilization */}
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h4 className="text-sm font-bold mb-3 text-gray-800 flex items-center gap-2">
-              <div className="w-1 h-5 bg-primary rounded-full"></div>
-              Bin Utilization
-            </h4>
-            <div className="flex flex-wrap gap-3">
-              {utilizationLevels.map(level => (
-                <div key={level.name} className="flex items-center gap-2 bg-white px-2 py-1 rounded-md shadow-sm">
-                  <div className={`w-4 h-4 rounded-full ${level.color}`}></div>
-                  <span className="text-sm font-medium">{level.name}</span>
-                </div>
-              ))}
-            </div>
+    <Collapsible
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      className="mb-6 w-full"
+    >
+      <Card className="shadow-lg border-0 overflow-hidden">
+        <CollapsibleTrigger asChild>
+          <div className="bg-gradient-to-r from-slate-800 to-slate-900 text-white p-4 cursor-pointer hover:from-slate-700 hover:to-slate-800 transition-colors flex justify-between items-center">
+            <h3 className="text-base font-bold flex items-center gap-2">
+              <HelpCircle className="h-5 w-5" />
+              Warehouse Legend
+            </h3>
+            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full bg-white/10 hover:bg-white/20 text-white">
+              {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </Button>
           </div>
-          
-          {/* Area Types */}
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h4 className="text-sm font-bold mb-3 text-gray-800 flex items-center gap-2">
-              <div className="w-1 h-5 bg-primary rounded-full"></div>
-              Area Types
-            </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {areaTypes.map(type => (
-                <div key={type.name} className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg shadow-sm">
-                  <div className={`w-8 flex items-center justify-center h-8 ${type.color} text-white rounded-md`}>
-                    <span>{type.icon}</span>
-                  </div>
-                  <span className="text-sm font-medium">{type.name}</span>
+        </CollapsibleTrigger>
+        
+        <CollapsibleContent>
+          <CardContent className="p-5 bg-white/95">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Bin Utilization */}
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="text-sm font-bold mb-3 text-gray-800 flex items-center gap-2">
+                  <div className="w-1 h-5 bg-primary rounded-full"></div>
+                  Bin Utilization
+                </h4>
+                <div className="flex flex-wrap gap-3">
+                  {utilizationLevels.map(level => (
+                    <div key={level.name} className="flex items-center gap-2 bg-white px-2 py-1 rounded-md shadow-sm">
+                      <div className={`w-4 h-4 rounded-full ${level.color}`}></div>
+                      <span className="text-sm font-medium">{level.name}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
-          
-          {/* Zone Face Types */}
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h4 className="text-sm font-bold mb-3 text-gray-800 flex items-center gap-2">
-              <div className="w-1 h-5 bg-primary rounded-full"></div>
-              Zone Face Types
-            </h4>
-            <div className="flex gap-3">
-              {faceTypes.map(type => (
-                <div key={type.name} className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-md shadow-sm flex-1">
-                  <div className="w-7 h-7 bg-white rounded-full flex items-center justify-center shadow-sm">
-                    <span>{type.icon}</span>
-                  </div>
-                  <div>
-                    <span className="text-sm font-medium">{type.name}</span>
-                    <div className={`text-xs px-2 py-0.5 ${type.color} rounded-full mt-1 inline-block`}>{type.name}</div>
-                  </div>
+              </div>
+              
+              {/* Area Types */}
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="text-sm font-bold mb-3 text-gray-800 flex items-center gap-2">
+                  <div className="w-1 h-5 bg-primary rounded-full"></div>
+                  Area Types
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {areaTypes.map(type => (
+                    <div key={type.name} className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg shadow-sm">
+                      <div className={`w-8 flex items-center justify-center h-8 ${type.color} text-white rounded-md`}>
+                        <span>{type.icon}</span>
+                      </div>
+                      <span className="text-sm font-medium">{type.name}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
-          
-          {/* Storage HU Types */}
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h4 className="text-sm font-bold mb-3 text-gray-800 flex items-center gap-2">
-              <div className="w-1 h-5 bg-primary rounded-full"></div>
-              Storage HU Types
-            </h4>
-            <div className="grid grid-cols-3 gap-3">
-              {storageTypes.map(type => (
-                <div key={type.name} className="flex flex-col items-center bg-white p-3 rounded-lg shadow-sm">
-                  <div className="text-2xl mb-1">{type.icon}</div>
-                  <span className={`text-xs px-2 py-0.5 ${type.color} rounded-full`}>{type.name}</span>
+              </div>
+              
+              {/* Zone Face Types */}
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="text-sm font-bold mb-3 text-gray-800 flex items-center gap-2">
+                  <div className="w-1 h-5 bg-primary rounded-full"></div>
+                  Zone Face Types
+                </h4>
+                <div className="flex gap-3">
+                  {faceTypes.map(type => (
+                    <div key={type.name} className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-md shadow-sm flex-1">
+                      <div className="w-7 h-7 bg-white rounded-full flex items-center justify-center shadow-sm">
+                        <span>{type.icon}</span>
+                      </div>
+                      <div>
+                        <span className="text-sm font-medium">{type.name}</span>
+                        <div className={`text-xs px-2 py-0.5 ${type.color} rounded-full mt-1 inline-block`}>{type.name}</div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+              
+              {/* Storage HU Types */}
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="text-sm font-bold mb-3 text-gray-800 flex items-center gap-2">
+                  <div className="w-1 h-5 bg-primary rounded-full"></div>
+                  Storage HU Types
+                </h4>
+                <div className="grid grid-cols-3 gap-3">
+                  {storageTypes.map(type => (
+                    <div key={type.name} className="flex flex-col items-center bg-white p-3 rounded-lg shadow-sm">
+                      <div className="text-2xl mb-1">{type.icon}</div>
+                      <span className={`text-xs px-2 py-0.5 ${type.color} rounded-full`}>{type.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+          </CardContent>
+        </CollapsibleContent>
+      </Card>
+    </Collapsible>
   );
 }
