@@ -11,11 +11,6 @@ interface ZoneContainerProps {
 export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContainerProps) {
   // Set a default collapsed state
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
-const [showStats, setShowStats] = useState<boolean>(false);
-
-// Mock expiry and health data
-const hasExpiryStock = zone.utilization > 70;
-const inventoryHealth = zone.utilization < 50 ? "poor" : zone.utilization < 75 ? "fair" : "good";
 
   const toggleExpand = (e: React.MouseEvent) => {
     setIsExpanded((prev: boolean) => !prev);
@@ -174,9 +169,7 @@ const inventoryHealth = zone.utilization < 50 ? "poor" : zone.utilization < 75 ?
         </div>
       ) : (
         // Collapsed Cube View
-        <div className={`${getUtilizationColor(zone.utilization).replace('bg-', 'border-')} border-2 rounded-xl max-w-[200px] relative group`}
-onMouseEnter={() => setShowStats(true)}
-onMouseLeave={() => setShowStats(false)}>
+        <div className={`${getUtilizationColor(zone.utilization).replace('bg-', 'border-')} border-2 rounded-xl max-w-[200px]`}>
           {viewType === "grid" ? (
             <div 
               className={`${bgGradient.replace('-50', '-200')} aspect-square w-full rounded-lg shadow-md flex flex-col justify-between p-2 relative overflow-hidden`}
@@ -231,38 +224,6 @@ onMouseLeave={() => setShowStats(false)}>
             </div>
           )}
         </div>
-        {/* Quick stats tooltip */}
-        {showStats && (
-          <div className="absolute -top-24 left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-lg p-2 z-10 w-48">
-            <div className="text-xs space-y-1">
-              <div className="flex justify-between">
-                <span>Avg Util:</span>
-                <span className="font-medium">{zone.utilization}%</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Empty Bins:</span>
-                <span className="font-medium">15%</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Health:</span>
-                <span className={`font-medium ${
-                  inventoryHealth === "good" ? "text-green-600" : 
-                  inventoryHealth === "fair" ? "text-amber-600" : "text-red-600"
-                }`}>{inventoryHealth}</span>
-              </div>
-              {hasExpiryStock && (
-                <div className="flex justify-between text-red-600">
-                <span>Expiry Alert:</span>
-                <span className="font-medium">Yes</span>
-              </div>
-              )}
-            </div>
-          </div>
-        )}
-        {/* Expiry indicator */}
-        {hasExpiryStock && (
-          <div className="absolute -top-2 -right-2 w-4 h-4 bg-purple-500 rounded-full border-2 border-white"></div>
-        )}
       )}
     </div>
   );

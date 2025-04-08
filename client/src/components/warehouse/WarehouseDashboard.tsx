@@ -42,29 +42,29 @@ export default function WarehouseDashboard({
   const [selectedArea, setSelectedArea] = useState<number>(1); // Default to first area (Inventory)
   const [selectedZone, setSelectedZone] = useState<string>("all");
   const [zoomLevel, setZoomLevel] = useState<number>(100);
-
+  
   const handleZoomIn = () => {
     if (zoomLevel < 150) {
       setZoomLevel(prevZoom => prevZoom + 10);
     }
   };
-
+  
   const handleZoomOut = () => {
     if (zoomLevel > 70) {
       setZoomLevel(prevZoom => prevZoom - 10);
     }
   };
-
+  
   const lastUpdated = new Date().toLocaleTimeString([], { 
     hour: '2-digit', 
     minute: '2-digit',
     hour12: true
   });
-
+  
   // Get area-specific icon and style
   const getAreaIcon = (areaType?: string) => {
     if (!areaType) return { icon: Box, color: "text-blue-600" };
-
+    
     switch(areaType) {
       case "Inventory": return { icon: Box, color: "text-blue-600" };
       case "Returns": return { icon: RefreshCcw, color: "text-amber-600" };
@@ -74,9 +74,9 @@ export default function WarehouseDashboard({
       default: return { icon: Box, color: "text-blue-600" };
     }
   };
-
+  
   const { icon: AreaIcon, color: areaIconColor } = getAreaIcon(warehouseData?.areaType);
-
+  
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 text-gray-800">
       {/* Header */}
@@ -91,7 +91,7 @@ export default function WarehouseDashboard({
                 CoreBox
               </h1>
             </div>
-
+            
             {warehouseData && (
               <div className="bg-gray-50 py-1.5 px-4 rounded-full border border-gray-200 flex items-center gap-2 shadow-sm">
                 <AreaIcon className={`h-4 w-4 ${areaIconColor}`} />
@@ -102,7 +102,7 @@ export default function WarehouseDashboard({
               </div>
             )}
           </div>
-
+          
           <div className="flex items-center space-x-3">
             <TooltipProvider>
               <Tooltip>
@@ -121,7 +121,7 @@ export default function WarehouseDashboard({
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-
+            
             <Button
               variant="outline"
               className="flex items-center gap-1.5 bg-white shadow-sm border-gray-200"
@@ -131,7 +131,7 @@ export default function WarehouseDashboard({
               <RefreshCcw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
               <span className="hidden md:inline">Refresh Data</span>
             </Button>
-
+            
             <Button variant="default" className="flex items-center gap-1.5 shadow-sm">
               <Filter className="h-4 w-4" />
               <span className="hidden md:inline">Filters</span>
@@ -139,7 +139,7 @@ export default function WarehouseDashboard({
           </div>
         </div>
       </header>
-
+      
       {/* Main Content */}
       <main className="flex-grow p-4 md:p-6 pb-8">
         <div className="max-w-7xl mx-auto">
@@ -166,7 +166,7 @@ export default function WarehouseDashboard({
                   <span>List</span>
                 </Button>
               </div>
-
+              
               <div className="flex items-center gap-2 border-l border-gray-200 pl-3">
                 <label className="text-sm text-gray-500">Area:</label>
                 <select 
@@ -189,7 +189,7 @@ export default function WarehouseDashboard({
                   <option value={4}>Staging</option>
                 </select>
               </div>
-
+              
               <div className="flex items-center gap-2 border-l border-gray-200 pl-3">
                 <label className="text-sm text-gray-500">Zone:</label>
                 <select 
@@ -209,7 +209,7 @@ export default function WarehouseDashboard({
                 </select>
               </div>
             </div>
-
+            
             <div className="flex items-center gap-3">
               <div className="flex bg-gray-100 p-1 rounded-full shadow-inner">
                 <Button 
@@ -232,16 +232,16 @@ export default function WarehouseDashboard({
                   <ZoomIn className="h-full w-full" />
                 </Button>
               </div>
-
+              
               <div className="hidden md:block text-xs bg-gray-100 text-gray-500 px-3 py-1.5 rounded-md">
                 Last updated: {lastUpdated}
               </div>
             </div>
           </div>
-
+          
           {/* Legend */}
           <Legend />
-
+          
           {/* Warehouse Visualization */}
           <div className="grid grid-cols-1 gap-6 mb-6">
             {isLoading ? (
@@ -250,7 +250,7 @@ export default function WarehouseDashboard({
                 <div className="relative">
                   <Skeleton className="h-8 w-1/3 mb-2" />
                   <Skeleton className="h-4 w-1/4 mb-6" />
-
+                  
                   <div className="grid grid-cols-1 gap-8">
                     {[1, 2, 3].map(zone => (
                       <div key={zone} className="mb-6">
@@ -291,67 +291,32 @@ export default function WarehouseDashboard({
               </Card>
             )}
           </div>
-
-          {/* Summary Metrics */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-4">
-            <div className="bg-white rounded-lg shadow-sm p-4">
-              <h3 className="text-sm font-medium text-gray-500">Avg Bin Utilization</h3>
-              <div className="mt-2 flex items-end gap-2">
-                <span className="text-2xl font-bold text-gray-900">68%</span>
-                <span className="text-sm text-green-600">+2.3%</span>
-              </div>
-            </div>
-            <div className="bg-white rounded-lg shadow-sm p-4">
-              <h3 className="text-sm font-medium text-gray-500">Empty Bins</h3>
-              <div className="mt-2 flex items-end gap-2">
-                <span className="text-2xl font-bold text-gray-900">15%</span>
-                <span className="text-sm text-red-600">+4.1%</span>
-              </div>
-            </div>
-            <div className="bg-white rounded-lg shadow-sm p-4">
-              <h3 className="text-sm font-medium text-gray-500">Inventory Health</h3>
-              <div className="mt-2 flex items-end gap-2">
-                <span className="text-2xl font-bold text-gray-900">92%</span>
-                <span className="text-sm text-green-600">+1.2%</span>
-              </div>
-            </div>
-            <div className="bg-white rounded-lg shadow-sm p-4">
-              <h3 className="text-sm font-medium text-gray-500">Expiry Risk</h3>
-              <div className="mt-2 flex items-end gap-2">
-                <span className="text-2xl font-bold text-amber-600">8%</span>
-                <span className="text-sm text-amber-600">+0.8%</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
-            <CategoryDistributionChart 
-              distribution={categoryDistribution} 
-              isLoading={isLoading}
-            />
-            <CriticalBins 
-              bins={criticalBins} 
-              isLoading={isLoading}
-            />
-          </div>
-
+          
           {/* Time-based Heatmap */}
           <div className="mb-6">
             <TimeBasedHeatmap isLoading={isLoading} />
           </div>
-
+          
           {/* Analytics */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <UtilizationSummary 
               area={warehouseData}
               isLoading={isLoading}
             />
-
-
+            
+            <CategoryDistributionChart 
+              distribution={categoryDistribution} 
+              isLoading={isLoading}
+            />
+            
+            <CriticalBins 
+              bins={criticalBins} 
+              isLoading={isLoading}
+            />
           </div>
         </div>
       </main>
-
+      
       {/* Footer */}
       <footer className="bg-white border-t border-gray-200 py-4 px-6 shadow-inner">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center">
