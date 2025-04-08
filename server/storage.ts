@@ -1,6 +1,7 @@
 import { 
   Area, Bin, InsertArea, InsertBin, InsertZone, User, InsertUser, 
-  Zone, AreaWithZonesAndBins, ZoneWithBins, CategoryDistribution 
+  Zone, AreaWithZonesAndBins, ZoneWithBins, CategoryDistribution,
+  AreaType, FaceType, StorageHUType
 } from "@shared/schema";
 
 // modify the interface with any CRUD methods
@@ -134,19 +135,53 @@ export class MemStorage implements IStorage {
   }
   
   private seedWarehouseData() {
-    // Create North Campus area
+    // Create Areas (based on requirements)
     const northCampus: Area = {
       id: this.currentAreaId++,
       name: "North Campus",
-      overallUtilization: 72
+      areaType: "Inventory" as AreaType,
+      overallUtilization: 55
     };
     this.areas.set(northCampus.id, northCampus);
+    
+    const returnArea: Area = {
+      id: this.currentAreaId++,
+      name: "Returns",
+      areaType: "Returns" as AreaType,
+      overallUtilization: 80
+    };
+    this.areas.set(returnArea.id, returnArea);
+    
+    const overflowArea: Area = {
+      id: this.currentAreaId++,
+      name: "Overflow",
+      areaType: "Overflow" as AreaType,
+      overallUtilization: 33
+    };
+    this.areas.set(overflowArea.id, overflowArea);
+    
+    const stagingArea: Area = {
+      id: this.currentAreaId++,
+      name: "Staging",
+      areaType: "Staging" as AreaType,
+      overallUtilization: 60
+    };
+    this.areas.set(stagingArea.id, stagingArea);
+    
+    const damageArea: Area = {
+      id: this.currentAreaId++,
+      name: "Damage",
+      areaType: "Damage" as AreaType,
+      overallUtilization: 20
+    };
+    this.areas.set(damageArea.id, damageArea);
     
     // Create Zones
     const zoneA: Zone = {
       id: this.currentZoneId++,
       name: "Zone A",
       areaId: northCampus.id,
+      faceType: "Pick" as FaceType,
       utilization: 68
     };
     this.zones.set(zoneA.id, zoneA);
@@ -155,6 +190,7 @@ export class MemStorage implements IStorage {
       id: this.currentZoneId++,
       name: "Zone B",
       areaId: northCampus.id,
+      faceType: "Reserve" as FaceType,
       utilization: 78
     };
     this.zones.set(zoneB.id, zoneB);
@@ -163,17 +199,49 @@ export class MemStorage implements IStorage {
       id: this.currentZoneId++,
       name: "Zone C",
       areaId: northCampus.id,
+      faceType: "Pick" as FaceType,
       utilization: 65
     };
     this.zones.set(zoneC.id, zoneC);
     
     // Create Bins for Zone A
     const binsZoneA = [
-      { binId: "A-01", utilizationPercent: 23, category: "Electronics" },
-      { binId: "A-02", utilizationPercent: 65, category: "Packaging" },
-      { binId: "A-03", utilizationPercent: 87, category: "Appliances" },
-      { binId: "A-04", utilizationPercent: 45, category: "Office Supplies" },
-      { binId: "A-05", utilizationPercent: 95, category: "Tools" }
+      { 
+        binId: "A-01", 
+        utilizationPercent: 23, 
+        category: "Electronics",
+        maxVolume: 2000,
+        storageHUType: "Pallet" as StorageHUType,
+        binPalletCapacity: 4
+      },
+      { 
+        binId: "A-02", 
+        utilizationPercent: 65, 
+        category: "Packaging",
+        maxVolume: 500,
+        storageHUType: "Carton" as StorageHUType
+      },
+      { 
+        binId: "A-03", 
+        utilizationPercent: 87, 
+        category: "Appliances",
+        maxVolume: 400,
+        storageHUType: "Carton" as StorageHUType
+      },
+      { 
+        binId: "A-04", 
+        utilizationPercent: 45, 
+        category: "Office Supplies",
+        maxVolume: 750,
+        storageHUType: "Carton" as StorageHUType
+      },
+      { 
+        binId: "A-05", 
+        utilizationPercent: 95, 
+        category: "Tools",
+        maxVolume: 600,
+        storageHUType: "Carton" as StorageHUType
+      }
     ];
     
     binsZoneA.forEach(binData => {
@@ -182,18 +250,53 @@ export class MemStorage implements IStorage {
         binId: binData.binId,
         zoneId: zoneA.id,
         utilizationPercent: binData.utilizationPercent,
-        category: binData.category
+        category: binData.category,
+        maxVolume: binData.maxVolume,
+        storageHUType: binData.storageHUType,
+        binPalletCapacity: binData.binPalletCapacity || null
       };
       this.bins.set(bin.id, bin);
     });
     
     // Create Bins for Zone B
     const binsZoneB = [
-      { binId: "B-01", utilizationPercent: 72, category: "Clothing" },
-      { binId: "B-02", utilizationPercent: 89, category: "Books" },
-      { binId: "B-03", utilizationPercent: 58, category: "Toys" },
-      { binId: "B-04", utilizationPercent: 93, category: "Sporting Goods" },
-      { binId: "B-05", utilizationPercent: 68, category: "Hardware" }
+      { 
+        binId: "B-01", 
+        utilizationPercent: 72, 
+        category: "Clothing",
+        maxVolume: 3000,
+        storageHUType: "Pallet" as StorageHUType,
+        binPalletCapacity: 6
+      },
+      { 
+        binId: "B-02", 
+        utilizationPercent: 89, 
+        category: "Books",
+        maxVolume: 1500,
+        storageHUType: "Crate" as StorageHUType
+      },
+      { 
+        binId: "B-03", 
+        utilizationPercent: 58, 
+        category: "Toys",
+        maxVolume: 800,
+        storageHUType: "Carton" as StorageHUType
+      },
+      { 
+        binId: "B-04", 
+        utilizationPercent: 93, 
+        category: "Sporting Goods",
+        maxVolume: 1200,
+        storageHUType: "Crate" as StorageHUType
+      },
+      { 
+        binId: "B-05", 
+        utilizationPercent: 68, 
+        category: "Hardware",
+        maxVolume: 2500,
+        storageHUType: "Pallet" as StorageHUType,
+        binPalletCapacity: 5
+      }
     ];
     
     binsZoneB.forEach(binData => {
@@ -202,18 +305,52 @@ export class MemStorage implements IStorage {
         binId: binData.binId,
         zoneId: zoneB.id,
         utilizationPercent: binData.utilizationPercent,
-        category: binData.category
+        category: binData.category,
+        maxVolume: binData.maxVolume,
+        storageHUType: binData.storageHUType,
+        binPalletCapacity: binData.binPalletCapacity || null
       };
       this.bins.set(bin.id, bin);
     });
     
     // Create Bins for Zone C
     const binsZoneC = [
-      { binId: "C-01", utilizationPercent: 85, category: "Kitchen" },
-      { binId: "C-02", utilizationPercent: 32, category: "Garden" },
-      { binId: "C-03", utilizationPercent: 61, category: "Automotive" },
-      { binId: "C-04", utilizationPercent: 54, category: "Pet Supplies" },
-      { binId: "C-05", utilizationPercent: 0, category: "Empty" }
+      { 
+        binId: "C-01", 
+        utilizationPercent: 85, 
+        category: "Kitchen",
+        maxVolume: 900,
+        storageHUType: "Carton" as StorageHUType
+      },
+      { 
+        binId: "C-02", 
+        utilizationPercent: 32, 
+        category: "Garden",
+        maxVolume: 2200,
+        storageHUType: "Pallet" as StorageHUType,
+        binPalletCapacity: 4
+      },
+      { 
+        binId: "C-03", 
+        utilizationPercent: 61, 
+        category: "Automotive",
+        maxVolume: 1800,
+        storageHUType: "Crate" as StorageHUType
+      },
+      { 
+        binId: "C-04", 
+        utilizationPercent: 54, 
+        category: "Pet Supplies",
+        maxVolume: 600,
+        storageHUType: "Carton" as StorageHUType
+      },
+      { 
+        binId: "C-05", 
+        utilizationPercent: 0, 
+        category: "Empty",
+        maxVolume: 300,
+        storageHUType: "Carton" as StorageHUType
+      }
     ];
     
     binsZoneC.forEach(binData => {
@@ -222,7 +359,10 @@ export class MemStorage implements IStorage {
         binId: binData.binId,
         zoneId: zoneC.id,
         utilizationPercent: binData.utilizationPercent,
-        category: binData.category
+        category: binData.category,
+        maxVolume: binData.maxVolume,
+        storageHUType: binData.storageHUType,
+        binPalletCapacity: binData.binPalletCapacity || null
       };
       this.bins.set(bin.id, bin);
     });

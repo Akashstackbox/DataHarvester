@@ -5,7 +5,7 @@ interface BinCardProps {
 }
 
 export default function BinCard({ bin }: BinCardProps) {
-  const { binId, utilizationPercent, category } = bin;
+  const { binId, utilizationPercent, category, maxVolume, storageHUType, binPalletCapacity } = bin;
   
   // Determine background color based on utilization percentage
   let bgColor = "bg-gray-200";
@@ -27,10 +27,15 @@ export default function BinCard({ bin }: BinCardProps) {
         <div className="text-xs font-medium mt-1">{utilizationPercent}%</div>
       </div>
       
-      {/* Tooltip that appears on hover */}
+      {/* Enhanced tooltip that appears on hover with all bin details */}
       <div className="absolute inset-0 bg-white/90 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-2 text-center">
         <div className="text-xs font-medium">Bin {binId}</div>
         <div className="text-xs mt-1">{utilizationPercent}% utilized</div>
+        <div className="text-xs mt-0.5">{storageHUType} Type</div>
+        <div className="text-xs mt-0.5">Vol: {maxVolume} units</div>
+        {binPalletCapacity && (
+          <div className="text-xs mt-0.5">Pallet Cap: {binPalletCapacity}</div>
+        )}
         <div className="text-xs text-gray-500 mt-0.5">{category || "Uncategorized"}</div>
       </div>
     </div>

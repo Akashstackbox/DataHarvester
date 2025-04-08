@@ -1,0 +1,462 @@
+Prompt for Lovable AI
+"Create a full-stack web application called 'Visual Warehouse Bin Utilization Map' using React with Tailwind CSS for the frontend and a Node.js backend with mock data. The app must visually represent a warehouse with the following detailed structure and features:
+Warehouse Structure:
+The warehouse contains multiple Areas (e.g., Area A1, Area A2, etc.).
+Each Area has an Area Type: Inventory, Returns, Overflow, Staging, or Damage.
+Each Area contains multiple Zones (e.g., Zone Z1, Zone Z2, etc.).
+Each Zone has a Face Type: either 'Pick' (for picking items) or 'Reserve' (for storage).
+Each Zone contains multiple Bins (e.g., Bin B1, Bin B2, etc.).
+Bin Details:
+Each Bin has a Bin Type, and multiple Bins in a Zone can share the same Bin Type or have different ones.
+Bin Type includes these attributes:
+Max Volume: A number representing the bin’s capacity (e.g., 1000 cubic units).
+Storage HU Type: Indicates the handling unit type, either 'Pallet', 'Carton', or another type.
+Bin Pallet Capacity: A positive integer (e.g., 5 pallets), only applicable if the Storage HU Type is 'Pallet'; ignored otherwise.
+Each Area/Zone/Bin has a Utilization Percentage: A number from 0 to 100 representing how full it is. When we are at area level, then its area utilization; when user clicks on an area to expand to see its zone, then its zone utilization; and when user expands to see its bins, the utilization for each bin will show.
+Visualization:
+Display the warehouse as a hierarchical map:
+Show all Areas as collapsible sections or tabs, labeled with their ID and Area Type (e.g., 'A1 - Inventory').
+Inside each Area, show its Zones as groups, labeled with their ID and Face Type (e.g., 'Z1 - Pick').
+Inside each Zone, show its Bins as a grid of boxes, labeled with their ID (e.g., 'B1').
+Use Tailwind CSS with Flexbox for Areas and Zones, and Grid for Bins, ensuring a responsive layout.
+Color-Coding for Areas/Zones/Bins for each level:
+Dynamically color each Area  based on its Utilization Percentage:
+0–33%: Green (low utilization).
+34–66%: Yellow (medium utilization).
+67–100%: Red (high utilization).
+Dynamically color each Zone  based on its Utilization Percentage:
+0–33%: Green (low utilization).
+34–66%: Yellow (medium utilization).
+67–100%: Red (high utilization).
+Dynamically color each Bin based on its Utilization Percentage:
+0–33%: Green (low utilization).
+34–66%: Yellow (medium utilization).
+67–100%: Red (high utilization).
+Ensure colors are clear and distinct, with area levels, zone levels, bin labels (ID) readable against the background.
+Backend Mock Data:
+Provide a Node.js API route (e.g., '/api/warehouse-data') that serves mock data with this structure:
+Multiple Areas, each with an ID, Area Type, and an array of Zones.
+Each Zone has an ID, Face Type, and an array of Bins.
+Each Bin has an ID, Bin Type (with Max Volume, Storage HU Type, and Bin Pallet Capacity where applicable), and Utilization Percentage.
+Example data:
+	Area A1 - Inventory (Utilization: 55%)
+	 • Zone Z1 - Pick (Utilization: 30%)
+ 	 – Bin B1: Pallet | Max Volume: 2000 | Pallet Capacity: 4 | Utilization: 25%
+  	– Bin B2: Carton | Max Volume: 500 | Utilization: 75%
+  	– Bin B3: Carton | Max Volume: 400 | Utilization: 60%
+	 • Zone Z2 - Reserve (Utilization: 50%)
+  		– Bin B4: Pallet | Max Volume: 3000 | Pallet Capacity: 6 | Utilization: 50%
+  		– Bin B5: Crate | Max Volume: 1500 | Utilization: 35%
+Area A2 - Returns (Utilization: 80%)
+ • Zone Z3 - Pick (Utilization: 100%)
+  – Bin B6: Carton | Max Volume: 400 | Utilization: 100%
+  – Bin B7: Carton | Max Volume: 500 | Utilization: 95%
+Area A3 - Overflow (Utilization: 33%)
+ • Zone Z4 - Reserve (Utilization: 15%)
+  – Bin B8: Pallet | Max Volume: 2500 | Pallet Capacity: 5 | Utilization: 10%
+  – Bin B9: Carton | Max Volume: 1000 | Utilization: 20%
+  – Bin B10: Crate | Max Volume: 1800 | Utilization: 15%
+Area A4 - Staging (Utilization: 60%)
+ • Zone Z5 - Pick (Utilization: 45%)
+  – Bin B11: Pallet | Max Volume: 2200 | Pallet Capacity: 4 | Utilization: 50%
+  – Bin B12: Carton | Max Volume: 600 | Utilization: 40%
+ • Zone Z6 - Reserve (Utilization: 75%)
+  – Bin B13: Pallet | Max Volume: 2700 | Pallet Capacity: 5 | Utilization: 70%
+  – Bin B14: Carton | Max Volume: 850 | Utilization: 80%
+Area A5 - Damage (Utilization: 20%)
+ • Zone Z7 - Pick (Utilization: 10%)
+  – Bin B15: Carton | Max Volume: 300 | Utilization: 5%
+  – Bin B16: Crate | Max Volume: 1000 | Utilization: 15%
+UI Features:
+Add a header with the title 'Visual Warehouse Bin Utilization Map'.
+Include a sidebar or dropdown to select an Area to view (default to showing all Areas).
+Display Bin Type details (Max Volume, Storage HU Type, Bin Pallet Capacity) as a tooltip or small text below each Bin’s ID.
+Ensure the layout is clean, intuitive, and visually appealing, with clear separation between Areas, Zones, and Bins.
+Details of any individual data (area/zone/bin) should be shown once the user hovers on it.
+UI should allow to expand multiple areas or zones at a time also.
+Tech Requirements:
+Use React with Next.js for the frontend.
+Use Tailwind CSS for styling.
+Use Node.js for the backend API to serve the mock data.
+Make the app responsive for desktop and mobile views.
+Below I highlight the key insights which you have to consider while building the interactive experience.
+
+
+Purpose of This Page
+ The Visual Warehouse Bin Utilization Map is designed to give users a clear, at-a-glance understanding of how warehouse space is being used. It helps users identify overused and underused areas quickly, allowing better planning, reallocation, and balancing of stock across zones and bins.
+Why Would a User Come to This Page?
+To view real-time space utilization across all warehouse areas.
+
+
+To monitor and manage capacity for different bin types (Pallet, Carton, Crate).
+
+
+To identify zones or bins nearing full capacity.
+
+
+To detect underused areas where inventory could be consolidated.
+
+
+To support planning for inbound or outbound inventory by checking available space.
+
+
+To prioritize replenishment in pick zones based on usage.
+
+
+To make operational decisions on load shifting or overflow handling.
+
+
+What Insights Can Be Added or Displayed on This Page?
+1. Warehouse Overview Insights
+Overall warehouse utilization (average across all areas).
+
+
+Total number of areas, zones, and bins.
+
+
+Breakdown of areas by type: Inventory, Returns, Overflow, Staging, Damage.
+
+
+2. Area-Level Insights
+Utilization % for each area (with color indicator).
+
+
+List of areas sorted by utilization (lowest to highest).
+
+
+Quick summary of total bins and average utilization per area.
+
+
+3. Zone-Level Insights
+Zone Face Type (Pick or Reserve).
+
+
+Utilization % per zone within an area.
+
+
+Highlight top underutilized and overutilized zones.
+
+
+Total bins per zone and average bin utilization.
+
+
+4. Bin-Level Insights
+Count of bins by HU type: Pallet, Carton, Crate.
+
+
+Number of bins above 80% utilization (critical).
+
+
+Number of bins below 30% utilization (low use).
+
+
+Tooltip or hover info showing:
+
+
+Max Volume
+
+
+Storage HU Type
+
+
+Pallet Capacity (if applicable)
+
+
+Current utilization %
+
+
+5. Utilization Heatmap or Color Coding
+Green (0–33%): Low utilization
+
+
+Yellow (34–66%): Moderate utilization
+
+
+Red (67–100%): High utilization
+
+
+Apply this coloring consistently at Area, Zone, and Bin levels for visual clarity.
+
+
+6. Summary Metrics
+Most congested area / zone / bin.
+
+
+Most vacant area / zone / bin.
+
+
+Average utilization for:
+
+
+All Pick Zones
+
+
+All Reserve Zones
+
+
+Each HU Type (Pallet, Carton, Crate)
+
+
+7. Interactive Filters
+Filter by: Area Type, Face Type, HU Type, Utilization Band.
+
+
+Toggle views for:
+
+
+All areas
+
+
+Specific area only
+
+
+Top 5 highest or lowest utilized bins
+
+
+Only pick or reserve zones
+
+
+8. Smart Suggestions (Optional AI Insight Section)
+“Zone Z3 in Area A2 is over 95% utilized—consider shifting to Zone Z4.”
+
+
+“Bins B15 and B16 are under 20% utilized in a prime pick zone—review stock placement.”
+
+
+“Area A1 is balanced with a mix of high and low zones—consider rebalancing to optimize.”
+
+
+9. User Experience (UX) Features
+Collapsible views at area and zone level.
+
+
+Ability to expand multiple areas/zones simultaneously.
+
+
+Responsive layout for desktop and mobile.
+
+
+Bin details visible on hover or tap.
+
+
+Clean and intuitive layout using Tailwind Flex/Grid for structure.
+
+
+
+
+
+
+
+
+
+
+APARNA’S notes:
+Product Requirements Document: Warehouse Bin Utilization Visual Map System
+Problem Statement
+Warehouse managers and logistics professionals lack intuitive visual tools to quickly assess bin utilization across warehouse areas. Without clear visualization of space usage, inventory placement, and utilization patterns, operations teams struggle to efficiently allocate resources, identify optimization opportunities, and make data-driven decisions about warehouse space utilization. Current warehouse management systems often present this critical information in spreadsheets or text-based formats that make it difficult to spot trends, bottlenecks, or optimization opportunities at a glance.
+Solution Overview
+The Warehouse Bin Utilization Visual Map System will provide a color-coded, interactive visualization tool that represents warehouse areas, zones, and bins in a hierarchical structure. The system will display real-time utilization data while allowing users to filter and highlight specific data points (utilization levels, product types, SKU classes, and categories) without disrupting the overall grid layout. This approach will enable warehouse managers to quickly identify optimization opportunities, track utilization patterns over time, and make informed decisions about inventory placement.
+Product Features
+1. Hierarchical Warehouse Visualization
+Display a complete warehouse layout organized by Areas → Zones → Bins
+Maintain consistent grid representation regardless of filter application
+Show utilization percentage at all levels (area, zone, bin) through color-coding
+Support expanding/collapsing sections to focus on specific areas or zones
+2. Bin-Level Data Visualization
+Color-code bins based on utilization percentage (low/medium/high)
+Display bin properties on hover or click:
+Product type stored
+Current utilization percentage
+Storage capacity (max volume)
+Storage HU type (pallet, carton, crate)
+Bin pallet capacity (where applicable)
+SKU class (A, B, C)
+Product category
+3. Advanced Filtering System
+Apply filters by:
+Utilization level (low, medium, high)
+Product type
+SKU class (A, B, C)
+Product category
+Bin type (pallet, carton, crate)
+Highlight bins matching filter criteria while maintaining overall grid layout
+Allow multiple filter criteria to be applied simultaneously
+Provide visual indication of which filters are currently active
+4. Time-Based Utilization Patterns
+Display utilization patterns throughout the day (6 AM - 10 PM)
+Include time slider to view warehouse state at specific times
+Toggle time view on/off to compare current state vs. time-based patterns
+Track utilization changes throughout the day to identify peak periods
+5. Summary Statistics and Insights
+Show aggregated utilization metrics for the entire warehouse
+Display utilization breakdowns by area and zone
+Identify underutilized and overutilized sections
+Suggest optimization opportunities based on utilization patterns
+User Stories
+As a warehouse manager, I want to see a color-coded visualization of bin utilization across all warehouse areas, so that I can quickly identify areas that are over or underutilized.
+
+
+As a logistics planner, I want to filter bins by product category while maintaining the overall grid layout, so that I can see the distribution pattern of specific product types across the warehouse.
+
+
+As an inventory specialist, I want to see utilization patterns throughout the day, so that I can identify peak usage times and plan restocking activities accordingly.
+
+
+As a warehouse supervisor, I want to filter by SKU class (A, B, C) to highlight high-value inventory locations, so that I can ensure these items are stored optimally.
+
+
+As an operations manager, I want to combine multiple filters (e.g., high utilization + specific product type), so that I can identify potential bottlenecks for particular product categories.
+
+
+Technical Requirements
+Frontend
+React with Next.js for component-based UI development
+Tailwind CSS for responsive styling
+Interactive elements for expanding/collapsing hierarchy levels
+Hover/click functionality for detailed bin information
+Dynamic color-coding based on utilization percentages
+Filter control panel with multi-select capabilities
+Time slider component for temporal visualization
+Backend
+Node.js API endpoints for data retrieval
+Data structure to support hierarchical warehouse representation
+Filtering logic to maintain grid structure while highlighting relevant bins
+Time-series data storage for utilization patterns
+Data Requirements
+Area data: ID, type, utilization percentage, zones
+Zone data: ID, face type (pick/reserve), utilization percentage, bins
+Bin data: ID, bin type, max volume, storage HU type, bin pallet capacity, current utilization percentage, product type, SKU class, product category
+Time-series data for daily utilization patterns
+User Interface Specifications
+Main View
+Header with application title and summary statistics
+Filter panel (collapsible) on the right side
+Time slider with toggle at the top of the main content area
+Tabs for different storage areas (A, B, C, etc.)
+Each selected area displays its zones
+Each zone displays its bins in a grid layout
+Color-coding key in the filter panel
+Bin Representation
+Rectangle with colored background based on utilization
+Bin ID displayed clearly
+Visual indicator for bins matching current filter criteria (border highlight)
+Hover state shows detailed information
+Filter Panel
+Utilization level filters (low, medium, high)
+Product type checkboxes with color indicators
+SKU class selection (A, B, C)
+Category filter options
+Clear filters button
+Current filter summary
+Time View Controls
+Toggle switch for time view
+Slider from 6 AM to 10 PM
+Current time display
+Play button for automatic time progression (optional)
+Entity Relationship Diagram (ERD)
++---------------+       +---------------+       +---------------+
+| Warehouse     |       | Area          |       | Zone          |
++---------------+       +---------------+       +---------------+
+| warehouse_id  |<----->| area_id       |<----->| zone_id       |
+| name          |       | warehouse_id  |       | area_id       |
+| location      |       | name          |       | name          |
+|               |       | type          |       | face_type     |
+|               |       | utilization   |       | utilization   |
++---------------+       +---------------+       +---------------+
+                                                       |
+                                                       |
+                                                       v
++---------------+       +---------------+       +---------------+
+| Product       |<----->| Bin_Product   |<----->| Bin           |
++---------------+       +---------------+       +---------------+
+| product_id    |       | bin_id        |       | bin_id        |
+| name          |       | product_id    |       | zone_id       |
+| category      |       | quantity      |       | bin_type_id   |
+| sku_class     |       |               |       | utilization   |
+| type          |       |               |       |               |
++---------------+       +---------------+       +---------------+
+                                                       |
+                                                       |
+                                                       v
++---------------+       +---------------+
+| Bin_Type      |       | Time_Series   |
++---------------+       +---------------+
+| bin_type_id   |       | time_id       |
+| name          |       | bin_id        |
+| max_volume    |       | timestamp     |
+| storage_hu    |       | utilization   |
+| pallet_cap    |       |               |
++---------------+       +---------------+
+Entity Descriptions
+Warehouse
+
+
+Primary entity representing the entire warehouse facility
+Contains basic warehouse information
+Area
+
+
+Represents a warehouse area (e.g., Storage Area A)
+Types include: Inventory, Returns, Overflow, Staging, Damage
+Linked to parent warehouse
+Zone
+
+
+Represents a zone within an area (e.g., Zone A1)
+Face types: Pick or Reserve
+Linked to parent area
+Bin
+
+
+Represents individual storage bins (e.g., bin-a1-1)
+Linked to parent zone and bin type
+Contains current utilization percentage
+Bin_Type
+
+
+Represents the physical characteristics of a bin
+Includes max volume, storage handling unit type, pallet capacity
+Product
+
+
+Represents products stored in the warehouse
+Includes product type, category, and SKU class (A, B, C)
+Bin_Product
+
+
+Junction table linking bins to products
+Tracks which products are stored in which bins and quantities
+Time_Series
+
+
+Tracks bin utilization over time
+Enables visualization of daily utilization patterns
+Relationships
+Each Warehouse contains multiple Areas
+Each Area contains multiple Zones
+Each Zone contains multiple Bins
+Each Bin has one Bin_Type
+Each Bin can contain multiple Products (through Bin_Product)
+Each Bin has multiple Time_Series entries for tracking utilization over time
+Technical Implementation Considerations
+For performance reasons, consider pre-calculating aggregated utilization at area and zone levels
+Implement appropriate caching mechanisms for time-series data
+Use efficient filtering algorithms that maintain grid structure while highlighting relevant bins
+Consider using WebSockets for real-time updates if connecting to live warehouse systems
+The system should be designed to scale to handle large warehouses with thousands of bins while maintaining responsive filtering and visualization capabilities.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -15,7 +15,10 @@ export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContain
   return (
     <div className="border-b border-gray-100" style={zoomStyle}>
       <div className="bg-neutral-100 px-4 py-3 flex justify-between items-center">
-        <h3 className="font-medium">{zone.name}</h3>
+        <div className="flex items-center gap-2">
+          <h3 className="font-medium">{zone.name}</h3>
+          <span className="text-xs px-2 py-0.5 bg-blue-100 text-blue-800 rounded">{zone.faceType}</span>
+        </div>
         <div className="text-sm text-gray-600">{zone.bins.length} bins • {zone.utilization}% utilized</div>
       </div>
       
@@ -33,9 +36,14 @@ export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContain
                 <div className="flex items-center gap-3">
                   <BinUtilizationIndicator utilizationPercent={bin.utilizationPercent} />
                   <span className="font-medium">{bin.binId}</span>
+                  <span className="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-700 rounded">{bin.storageHUType}</span>
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="text-sm">{bin.category}</span>
+                  <span className="text-xs text-gray-500">Vol: {bin.maxVolume}</span>
+                  {bin.binPalletCapacity && (
+                    <span className="text-xs text-gray-500">Pallet: {bin.binPalletCapacity}</span>
+                  )}
                   <span className="text-sm font-medium">{bin.utilizationPercent}%</span>
                 </div>
               </div>
