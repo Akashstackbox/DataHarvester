@@ -203,25 +203,25 @@ export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContain
               </div>
             </div>
           ) : (
-            <div className={`${bgGradient.replace('-50', '-200')} w-full h-full rounded-lg shadow-md p-3`}>
-              <div className="flex flex-col h-full justify-between">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className={`${textColor} text-lg`}>{faceTypeIcon}</div>
+            <div className={`${bgGradient.replace('-50', '-200')} w-full rounded-lg shadow-md p-3`}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className={`${textColor} text-lg`}>{faceTypeIcon}</div>
+                  <div>
                     <div className={`font-bold ${textColor}`}>{zone.name}</div>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <span className={`text-xs font-medium ${textColor}`}>{zone.bins.length} bins</span>
+                    </div>
                   </div>
-                  <div className={`font-bold ${textColor}`}>{zone.utilization}%</div>
                 </div>
-                <div className="flex flex-col gap-2 mt-2">
-                  <div className="flex items-center justify-between">
-                    <span className={`text-xs font-medium ${textColor}`}>{zone.bins.length} bins</span>
-                  </div>
-                  <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                <div className="flex items-center gap-3">
+                  <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
                     <div 
                       className={`h-full ${getUtilizationColor(zone.utilization)}`}
                       style={{ width: `${zone.utilization}%` }}
                     ></div>
                   </div>
+                  <div className={`font-bold ${textColor}`}>{zone.utilization}%</div>
                 </div>
               </div>
             </div>
