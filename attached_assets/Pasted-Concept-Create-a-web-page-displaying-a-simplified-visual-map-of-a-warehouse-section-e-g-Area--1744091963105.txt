@@ -1,0 +1,21 @@
+Concept: Create a web page displaying a simplified, visual map of a warehouse section (e.g., Area -> Zones -> Bins). Each bin in the visualization will be dynamically color-coded based on its utilization percentage (how full it is), using mock data served from a backend. This provides an intuitive, at-a-glance overview of warehouse space usage.
+How it Works: The application will:
+On page load, the frontend requests warehouse layout and utilization data for a specific area from the backend API.
+The backend Node.js API route serves a predefined mock data structure containing the hierarchy (Area, Zones, Bins) and the utilization percentage for each bin.
+The frontend receives this data and dynamically renders the visual layout (e.g., using nested divs representing Area, Zones, and a grid of Bins).
+Each rendered Bin element is assigned a background color based on its utilizationPercent value, according to predefined rules (e.g., green for low, yellow for medium, red for high utilization).
+The resulting visualization displays the warehouse section with color-coded bins indicating space usage.
+Tech Stack:
+Frontend: Next.js (for rendering the visual map and handling data fetching)
+Backend: Node.js (using Next.js API Routes for serving the mock layout and utilization data)
+Key Challenges & Learning Opportunities:
+Designing an intuitive visual representation for hierarchical warehouse data (Area -> Zone -> Bin) (PM focus).
+Defining a clear and effective color-coding scheme to represent utilization levels (PM focus).
+Implementing frontend logic to fetch, parse, and manage nested data structures (Dev focus).
+Developing the dynamic rendering logic to map the hierarchical data to visual elements (e.g., using nested loops/maps in React) (Dev focus).
+Implementing conditional styling logic to apply colors based on bin utilization data (Dev focus).
+Applying CSS layout techniques (e.g., Flexbox, Grid) effectively to create the desired visual structure (Dev focus).
+AI Tool Usage:
+Utilize Cursor extensively to generate boilerplate code (Next.js components, API routes, React hooks), complex rendering logic (nested maps), conditional styling logic (mapping utilization % to CSS classes), CSS layout code (Flexbox/Grid), and the backend API route handler.
+Lovable/Figma/Sketch (or similar) used by PMs to design the visual concept, layout structure, bin representation, color scheme, and information hierarchy.
+Outcome: A functional prototype web application displaying a visual representation of a simplified warehouse section (Area/Zones/Bins). Bins are accurately color-coded based on mock utilization data fetched from a backend API, reflecting the PM's design for layout and color scheme.
