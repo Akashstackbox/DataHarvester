@@ -104,13 +104,31 @@ export default function AreaContainer({ area, selectedZone, viewType, zoomLevel 
                 </p>
               </div>
               
-              <div className="flex flex-col items-end">
-                <div className="text-lg font-bold mb-1">{area.overallUtilization}% utilized</div>
-                <div className="w-40 h-2.5 bg-black/20 rounded-full overflow-hidden backdrop-blur-sm">
-                  <div 
-                    className={`h-full ${utilizationColor}`} 
-                    style={{ width: `${area.overallUtilization}%` }}
-                  ></div>
+              <div className="flex flex-col items-end gap-2">
+                <div>
+                  <div className="text-lg font-bold mb-1">{area.overallUtilization}% utilized</div>
+                  <div className="w-40 h-2.5 bg-black/20 rounded-full overflow-hidden backdrop-blur-sm">
+                    <div 
+                      className={`h-full ${utilizationColor}`} 
+                      style={{ width: `${area.overallUtilization}%` }}
+                    ></div>
+                  </div>
+                </div>
+                
+                <div>
+                  <div className="text-sm font-medium mb-1 text-white/90">
+                    {Math.round((area.zones.reduce((sum, zone) => 
+                      sum + zone.bins.filter(bin => bin.utilizationPercent === 0).length, 0
+                    ) / area.zones.reduce((sum, zone) => sum + zone.bins.length, 0)) * 100)}% empty bins
+                  </div>
+                  <div className="w-40 h-2.5 bg-black/20 rounded-full overflow-hidden backdrop-blur-sm">
+                    <div 
+                      className="h-full bg-white/30"
+                      style={{ width: `${Math.round((area.zones.reduce((sum, zone) => 
+                        sum + zone.bins.filter(bin => bin.utilizationPercent === 0).length, 0
+                      ) / area.zones.reduce((sum, zone) => sum + zone.bins.length, 0)) * 100)}%` }}
+                    ></div>
+                  </div>
                 </div>
               </div>
             </div>
