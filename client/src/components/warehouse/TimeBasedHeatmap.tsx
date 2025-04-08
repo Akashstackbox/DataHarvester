@@ -111,22 +111,35 @@ export default function TimeBasedHeatmap({ isLoading }: TimeBasedHeatmapProps) {
   // Handle scroll actions
   const scrollLeft = () => {
     if (scrollRef.current) {
-      scrollRef.current.scrollLeft -= 240; // Scroll 3 cells left
+      const newScrollPosition = scrollRef.current.scrollLeft - 240;
+      scrollRef.current.scrollTo({
+        left: Math.max(0, newScrollPosition),
+        behavior: 'smooth'
+      });
     }
   };
   
   const scrollRight = () => {
     if (scrollRef.current) {
-      scrollRef.current.scrollLeft += 240; // Scroll 3 cells right
+      const maxScroll = scrollRef.current.scrollWidth - scrollRef.current.clientWidth;
+      const newScrollPosition = scrollRef.current.scrollLeft + 240;
+      scrollRef.current.scrollTo({
+        left: Math.min(maxScroll, newScrollPosition),
+        behavior: 'smooth'
+      });
     }
   };
   
   const scrollToCurrent = () => {
     if (scrollRef.current) {
-      const cellWidth = 80; // Width of each time cell in pixels
+      const cellWidth = 80;
+      const containerWidth = scrollRef.current.clientWidth;
+      const targetPosition = (currentHour * cellWidth) - (containerWidth / 2) + (cellWidth / 2);
       
-      // Scroll to position based on current hour (centered)
-      scrollRef.current.scrollLeft = (currentHour * cellWidth) - (scrollRef.current.clientWidth / 2) + (cellWidth / 2);
+      scrollRef.current.scrollTo({
+        left: Math.max(0, targetPosition),
+        behavior: 'smooth'
+      });
     }
   };
   
