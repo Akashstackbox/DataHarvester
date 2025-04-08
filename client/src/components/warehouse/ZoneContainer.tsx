@@ -92,7 +92,7 @@ export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContain
 
   return (
     <div 
-      className={`mb-4 ${isExpanded ? 'w-full col-span-full md:col-span-2' : 'cursor-pointer transform hover:scale-105 transition-all'}`}
+      className={`mb-2 ${isExpanded ? 'w-full col-span-full md:col-span-2' : 'cursor-pointer transform hover:scale-105 transition-all'}`}
       style={zoomStyle}
       onClick={toggleExpand}
     >
@@ -172,17 +172,17 @@ export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContain
         <div className={`${getUtilizationColor(zone.utilization).replace('bg-', 'border-')} border-2 rounded-xl`}>
           {viewType === "grid" ? (
             <div 
-              className={`${bgGradient.replace('-50', '-200')} aspect-square w-full rounded-lg shadow-md flex flex-col justify-between p-3 relative overflow-hidden`}
+              className={`${bgGradient.replace('-50', '-200')} aspect-square w-full rounded-lg shadow-md flex flex-col justify-between p-2 relative overflow-hidden`}
             >
               <div className="flex flex-col h-full">
                 <div className="flex justify-between items-start">
-                  <div className={`text-xs font-bold ${textColor}`}>{zone.name}</div>
-                  <div className={`text-xs font-semibold ${textColor} bg-white/70 rounded-full px-1.5 py-0.5`}>
+                  <div className={`text-[10px] font-bold ${textColor}`}>{zone.name}</div>
+                  <div className={`text-[10px] font-semibold ${textColor} bg-white/70 rounded-full px-1 py-0.5`}>
                     {zone.utilization}%
                   </div>
                 </div>
                 <div className="flex-1 flex items-center justify-center">
-                  <div className={`text-2xl font-bold ${textColor}`}>{zone.name.replace('Zone ', '')}</div>
+                  <div className={`text-xl font-bold ${textColor}`}>{zone.name.replace('Zone ', '')}</div>
                 </div>
               </div>
             </div>
