@@ -169,7 +169,7 @@ export class MemStorage implements IStorage {
       for (let i = 1; i <= 4; i++) {
         const zone: Zone = {
           id: this.currentZoneId++,
-          name: `Zone ${name}-${i}`,
+          name: `Z${i}`,
           areaId: id,
           faceType: i % 2 === 0 ? "Reserve" as FaceType : "Pick" as FaceType, // Alternate Pick/Reserve
           utilization: Math.floor(Math.random() * 101) // Random utilization
