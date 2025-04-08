@@ -1,0 +1,74 @@
+End-to-End User Journey
+👤 User Persona:
+Role: Warehouse Manager
+Goal: Monitor warehouse health, resolve inventory issues, and optimize space and stock quality.
+🟢 1. Login & Home Dashboard
+🗺 2. Explore Warehouse Visualization
+📍 Area Level
+🔍 Drill Down to Zone
+🔎 Drill Down to Bin
+Action: User logs into the platform. •
+View: A high-level warehouse overview with: •
+Summary tiles for: •
+Avg Bin Utilization
+•
+% Empty Bins •
+Inventory Health % •
+Expiry Risk % •
+Interactive map at Area Level. •
+Action: Hover or click on an Area. •
+View: Each Area is color-coded based on selected metric (e.g., Utilization). •
+Tooltip: Shows quick stats: Avg Util %, Empty Bins %, Health %, Expiry Bins. •
+Action: Click on Area → navigates to Zone view. •
+View: Each Zone within Area appears as a subgrid, with same color metrics. •
+Action: Click on Zone → zooms into Bin view. •
+View: •
+Bins appear as colored tiles in a 2D grid. •
+🎛 3. Switch Between Views
+User selects from these heatmap modes:
+🧯 4. Take Action on Bins
+🚨 Ineligible Stock
+⏳ Expiry Stock
+📦 5. Bin Consolidation Workflow
+Color reflects selected metric (Utilization, Health, Expiry). •
+Tooltip or modal with full bin metrics: SKUs, % Free, Last Process, Flags. •
+📊 Utilization View: Colors based on fullness. Gray = Empty. •
+🧬 Inventory Health: Red = Ineligible SKUs present. •
+⏳ Expiry Risk: Purple border = has expiry stock. •
+🕓 Time Slider Mode: •
+Action: Slide through time to view changes in utilization. •
+Option: Animate trends over past 30/60/90 days. •
+Action: Click bin with red flag (ineligible stock). •
+Modal Shows: •
+Which SKUs are ineligible
+•
+Reason (e.g., incorrect zone) •
+Option to: Create Movement to a valid bin or quarantine area •
+Action: Click bin with expiry warning
+•
+Modal Shows: •
+Earliest expiry date
+•
+List of expiring SKUs •
+Option to: Trigger Expiry Movement •
+User switches to Consolidation View •
+Selects one or more Areas/Zones •
+System shows: •
+📈 6. Summary Metrics & Reporting
+At any level (Warehouse, Area, Zone), user can view:
+Export Options: CSV, PDF, Snapshot
+✅ 7. Outcome
+Avg Bin Util % (excludes empty) •
+Empty Bin % •
+Action: User sets threshold (e.g., consolidate if avg < 60%) •
+System proposes candidate bins •
+User confirms: Triggers consolidation process •
+Avg Utilization (excluding empty bins) •
+% Empty Bins •
+Inventory Health % •
+% of Bins with Expiry Stock •
+Warehouse Manager identifies problematic zones •
+Executes quick actions to improve stock compliance and reduce risk •
+Optimizes bin space via consolidation
+•
+Monitors improvement over time via time slider
