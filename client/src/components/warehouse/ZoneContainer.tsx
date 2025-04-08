@@ -11,23 +11,23 @@ interface ZoneContainerProps {
 export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContainerProps) {
   // Set a default collapsed state
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
-  
+
   const toggleExpand = (e: React.MouseEvent) => {
     setIsExpanded((prev: boolean) => !prev);
     // Prevent the event from bubbling up
     e.stopPropagation();
   };
-  
+
   const zoomStyle = {
     fontSize: `${zoomLevel / 100}rem`,
   };
-  
+
   // Get styles based on areaId and face type
   let bgGradient = "bg-gradient-to-r from-blue-50 to-indigo-50";
   let borderColor = "border-blue-200";
   let textColor = "text-blue-800";
   let shadowColor = "shadow-blue-100";
-  
+
   // For Pick zones
   if (zone.faceType === "Pick") {
     switch (zone.areaId) {
@@ -86,10 +86,10 @@ export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContain
         break;
     }
   }
-    
+
   // Icon based on face type
   const faceTypeIcon = zone.faceType === "Pick" ? "🔍" : "🔋";
-  
+
   return (
     <div 
       className={`mb-4 ${isExpanded ? 'w-full col-span-full md:col-span-2' : 'cursor-pointer transform hover:scale-105 transition-all'}`}
@@ -113,7 +113,7 @@ export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContain
                 </div>
               </div>
             </div>
-            
+
             <div className="flex flex-col items-end">
               <div className={`text-sm font-bold ${textColor}`}>{zone.utilization}% utilized</div>
               <div className="w-32 h-2 bg-gray-200 rounded-full mt-1 overflow-hidden">
@@ -124,7 +124,7 @@ export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContain
               </div>
             </div>
           </div>
-          
+
           <div className="p-5 bg-white">
             {viewType === "grid" ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -173,25 +173,15 @@ export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContain
           <div 
             className={`${bgGradient.replace('-50', '-200')} aspect-square w-full rounded-lg shadow-md flex flex-col justify-between p-3 relative overflow-hidden`}
           >
-            <div className="flex justify-between items-start">
-              <div className={`text-xs font-bold ${textColor}`}>{zone.name}</div>
-              <div className={`text-xs font-semibold ${textColor} bg-white/70 rounded-full px-1.5 py-0.5`}>
-                {zone.utilization}%
-              </div>
-            </div>
-            
-            <div className="mt-auto">
-              <div className="flex justify-between items-center">
-                <div className={`text-xs px-1.5 py-0.5 ${bgGradient.replace('-50', '-300')} ${textColor} rounded-sm font-medium`}>
-                  {zone.faceType}
+            <div className="flex flex-col h-full">
+              <div className="flex justify-between items-start">
+                <div className={`text-xs font-bold ${textColor}`}>{zone.name}</div>
+                <div className={`text-xs font-semibold ${textColor} bg-white/70 rounded-full px-1.5 py-0.5`}>
+                  {zone.utilization}%
                 </div>
-                <div className={`text-xs ${textColor}`}>{faceTypeIcon}</div>
               </div>
-              <div className="mt-1 h-1 bg-gray-200 rounded-full overflow-hidden">
-                <div 
-                  className={`h-full rounded-full ${getUtilizationColor(zone.utilization)}`}
-                  style={{ width: `${zone.utilization}%` }}
-                ></div>
+              <div className="flex-1 flex items-center justify-center">
+                <div className={`text-2xl font-bold ${textColor}`}>{zone.name.replace('Zone ', '')}</div>
               </div>
             </div>
           </div>
@@ -210,7 +200,7 @@ function getUtilizationColor(percent: number): string {
 
 function BinUtilizationIndicator({ utilizationPercent }: { utilizationPercent: number }) {
   let bgGradient = "bg-gradient-to-r from-gray-200 to-gray-300";
-  
+
   if (utilizationPercent > 0) {
     if (utilizationPercent <= 50) {
       bgGradient = "bg-gradient-to-r from-green-400 to-green-500";
@@ -220,7 +210,7 @@ function BinUtilizationIndicator({ utilizationPercent }: { utilizationPercent: n
       bgGradient = "bg-gradient-to-r from-red-400 to-red-500";
     }
   }
-  
+
   return (
     <div className="relative w-5 h-5 flex items-center justify-center">
       <div className={`w-3.5 h-3.5 rounded-full ${bgGradient} shadow-sm`}></div>
