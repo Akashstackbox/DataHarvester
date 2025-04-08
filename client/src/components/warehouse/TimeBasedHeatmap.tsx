@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { ChevronLeft, ChevronRight, Clock } from "lucide-react";
+import { ChevronLeft, ChevronRight, Clock, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface TimeSlot {
@@ -20,6 +20,10 @@ interface TimeBasedHeatmapProps {
 export default function TimeBasedHeatmap({ isLoading }: TimeBasedHeatmapProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  
+  // Current hour for highlighting
+  const currentHour = new Date().getHours();
+  const currentTimeString = `${currentHour.toString().padStart(2, '0')}:00`;
   
   // Mock data for the time-based heatmap
   const generateMockTimeData = (): ZoneTimeData[] => {
@@ -64,17 +68,27 @@ export default function TimeBasedHeatmap({ isLoading }: TimeBasedHeatmapProps) {
   // Scroll to current time on initial render
   useEffect(() => {
     if (scrollRef.current) {
-      const now = new Date();
-      const currentHour = now.getHours();
       const cellWidth = 80; // Width of each time cell in pixels
       
       // Scroll to position based on current hour (centered)
       scrollRef.current.scrollLeft = (currentHour * cellWidth) - (scrollRef.current.clientWidth / 2) + (cellWidth / 2);
     }
-  }, []);
+  }, [currentHour]);
   
-  // Function to get color based on utilization
-  const getUtilizationColor = (percent: number): string => {
+  // Determine if a time slot is in the future (after current time)
+  const isFutureTime = (timeStr: string): boolean => {
+    const hour = parseInt(timeStr.split(':')[0]);
+    return hour > currentHour;
+  };
+  
+  // Function to get color based on utilization and time
+  const getUtilizationColor = (percent: number, timeStr: string): string => {
+    // If time is in the future, return gray
+    if (isFutureTime(timeStr)) {
+      return "bg-gray-300";
+    }
+    
+    // Otherwise color based on utilization
     if (percent >= 90) return "bg-red-600";
     if (percent >= 75) return "bg-red-500";
     if (percent >= 60) return "bg-amber-500";
@@ -85,7 +99,11 @@ export default function TimeBasedHeatmap({ isLoading }: TimeBasedHeatmapProps) {
   };
   
   // Function to get text color based on utilization
-  const getTextColor = (percent: number): string => {
+  const getTextColor = (percent: number, timeStr: string): string => {
+    if (isFutureTime(timeStr)) {
+      return "text-gray-500";
+    }
+    
     if (percent >= 60) return "text-white";
     return "text-gray-800";
   };
@@ -105,18 +123,12 @@ export default function TimeBasedHeatmap({ isLoading }: TimeBasedHeatmapProps) {
   
   const scrollToCurrent = () => {
     if (scrollRef.current) {
-      const now = new Date();
-      const currentHour = now.getHours();
       const cellWidth = 80; // Width of each time cell in pixels
       
       // Scroll to position based on current hour (centered)
       scrollRef.current.scrollLeft = (currentHour * cellWidth) - (scrollRef.current.clientWidth / 2) + (cellWidth / 2);
     }
   };
-  
-  // Current hour for highlighting
-  const currentHour = new Date().getHours();
-  const currentTimeString = `${currentHour.toString().padStart(2, '0')}:00`;
   
   return (
     <Card className={`shadow-lg border-0 overflow-hidden transition-all duration-300 ${isExpanded ? 'col-span-3' : ''}`}>
@@ -217,8 +229,8 @@ export default function TimeBasedHeatmap({ isLoading }: TimeBasedHeatmapProps) {
                         {zone.zoneName}
                       </div>
                       {zone.timeSlots.map((slot) => {
-                        const bgColor = getUtilizationColor(slot.utilization);
-                        const textColor = getTextColor(slot.utilization);
+                        const bgColor = getUtilizationColor(slot.utilization, slot.time);
+                        const textColor = getTextColor(slot.utilization, slot.time);
                         return (
                           <div 
                             key={`${zone.zoneName}-${slot.time}`} 
@@ -242,6 +254,42 @@ export default function TimeBasedHeatmap({ isLoading }: TimeBasedHeatmapProps) {
               </div>
             </div>
             
+            {/* Time Indication Bar */}
+            <div className="rounded-lg border border-gray-200 shadow-inner bg-gray-50 h-8 p-1 relative">
+              <div className="flex justify-between text-[10px] text-gray-500 px-1 absolute inset-x-0 top-1">
+                <span>12 AM</span>
+                <span>6 AM</span>
+                <span>12 PM</span>
+                <span>6 PM</span>
+                <span>12 AM</span>
+              </div>
+              
+              <div className="h-3 bg-gradient-to-r from-indigo-200 via-blue-200 to-purple-200 rounded-full mt-3 relative">
+                {/* Current time marker */}
+                <div 
+                  className="absolute top-1/2 -translate-y-1/2 w-2 h-6 bg-blue-600 rounded-full shadow-md"
+                  style={{ 
+                    left: `${(currentHour / 24) * 100}%`, 
+                    transform: 'translate(-50%, -50%)'
+                  }}
+                >
+                  <div className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[10px] bg-blue-600 text-white px-1 py-0.5 rounded-sm">
+                    Now
+                  </div>
+                </div>
+                
+                {/* Past/Future divider */}
+                <div className="absolute inset-y-0 bg-gray-200 opacity-30" style={{ 
+                  left: `${(currentHour / 24) * 100}%`, 
+                  right: 0
+                }}>
+                  <div className="absolute top-1/2 -translate-y-1/2 -left-3">
+                    <ArrowRight className="h-3 w-3 text-gray-400" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            
             <div className="text-xs text-gray-500 flex items-center justify-between">
               <div>
                 Scroll horizontally to view more time periods
@@ -258,6 +306,10 @@ export default function TimeBasedHeatmap({ isLoading }: TimeBasedHeatmapProps) {
                 <div className="flex items-center gap-1">
                   <div className="w-3 h-3 bg-red-500 rounded-sm"></div>
                   <span>High</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-3 h-3 bg-gray-300 rounded-sm"></div>
+                  <span>Future (Empty)</span>
                 </div>
               </div>
             </div>
