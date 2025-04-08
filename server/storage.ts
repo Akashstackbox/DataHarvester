@@ -146,10 +146,9 @@ export class MemStorage implements IStorage {
       { name: "Returns", type: "Returns" as AreaType, utilization: 80 },
       { name: "Overflow", type: "Overflow" as AreaType, utilization: 35 },
       { name: "Staging", type: "Staging" as AreaType, utilization: 60 },
-      { name: "Area 5", type: "Inventory" as AreaType, utilization: 50 },
-      { name: "Area 6", type: "Returns" as AreaType, utilization: 70 },
-      { name: "Area 7", type: "Overflow" as AreaType, utilization: 40 },
-      { name: "Area 8", type: "Staging" as AreaType, utilization: 55 }
+      { name: "Receiving", type: "Inventory" as AreaType, utilization: 75 },
+      { name: "Processing", type: "Returns" as AreaType, utilization: 45 },
+      { name: "Distribution", type: "Staging" as AreaType, utilization: 85 }
     ];
 
     // Create Areas and store their IDs
