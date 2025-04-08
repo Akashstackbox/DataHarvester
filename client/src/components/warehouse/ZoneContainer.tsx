@@ -175,6 +175,11 @@ export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContain
               className={`${bgGradient.replace('-50', '-200')} aspect-square w-full rounded-lg shadow-md flex flex-col justify-between p-2 relative overflow-hidden`}
             >
               <div className="flex flex-col h-full">
+                <div className="flex justify-end">
+                  <div className={`text-[10px] font-medium ${textColor} bg-white/70 rounded-full px-1.5 py-0.5`}>
+                    {zone.bins.length} bins
+                  </div>
+                </div>
                 <div className="flex-1 flex items-center justify-center">
                   <div className={`text-xl font-bold ${textColor}`}>{zone.name.replace('Zone ', '')}</div>
                 </div>
