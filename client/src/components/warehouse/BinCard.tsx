@@ -5,7 +5,7 @@ interface BinCardProps {
 }
 
 export default function BinCard({ bin }: BinCardProps) {
-  const { binId, utilizationPercent, category, maxVolume, storageHUType, binPalletCapacity } = bin;
+  const { binId, utilizationPercent, category, maxVolume, storageHUType, binPalletCapacity, skuEligibility } = bin;
   
   // Determine color scheme based on utilization percentage
   let bgGradient = "bg-gradient-to-br from-gray-100 to-gray-300";
@@ -43,8 +43,22 @@ export default function BinCard({ bin }: BinCardProps) {
     ? category.split(' ')[0] 
     : "Uncategorized";
   
+  // Determine SKU eligibility marker
+  let eligibilityMarker = null;
+  let eligibilityColor = '';
+  
+  if (skuEligibility === 'AllEligible') {
+    eligibilityColor = 'bg-blue-500';
+  } else if (skuEligibility === 'MixedEligibility') {
+    eligibilityColor = 'bg-purple-500';
+  } else if (skuEligibility === 'AllIneligible') {
+    eligibilityColor = 'bg-red-500';
+  }
+  
   return (
     <div className={`${bgGradient} rounded-lg shadow-md overflow-hidden relative group hover:shadow-lg transition-all duration-300`}>
+      {/* SKU Eligibility indicator */}
+      <div className={`absolute top-0 right-0 w-2 h-2 ${eligibilityColor} rounded-full m-1 z-10`}></div>
       <div className="p-3">
         <div className="flex justify-between items-center">
           <div className={`font-bold text-sm ${textColor}`}>{binId}</div>
@@ -77,6 +91,18 @@ export default function BinCard({ bin }: BinCardProps) {
         
         <div className="mt-0.5 text-[10px] font-medium bg-blue-100 text-blue-800 rounded px-1 py-px leading-tight w-full max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
           {firstWord}
+        </div>
+        
+        {/* SKU Eligibility indicator in tooltip */}
+        <div className={`mt-0.5 text-[10px] font-medium rounded px-1 py-px leading-tight w-full flex items-center justify-center ${
+          skuEligibility === 'AllEligible' ? 'bg-blue-100 text-blue-800' : 
+          skuEligibility === 'MixedEligibility' ? 'bg-purple-100 text-purple-800' : 
+          'bg-red-100 text-red-800'
+        }`}>
+          <span className={`inline-block w-1.5 h-1.5 rounded-full mr-1 ${eligibilityColor}`}></span>
+          {skuEligibility === 'AllEligible' ? 'All Eligible' : 
+           skuEligibility === 'MixedEligibility' ? 'Mixed SKUs' : 
+           'All Ineligible'}
         </div>
       </div>
     </div>

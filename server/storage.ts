@@ -1,7 +1,7 @@
 import { 
   Area, Bin, InsertArea, InsertBin, InsertZone, User, InsertUser, 
   Zone, AreaWithZonesAndBins, ZoneWithBins, CategoryDistribution,
-  AreaType, FaceType, StorageHUType
+  AreaType, FaceType, StorageHUType, SkuEligibilityType
 } from "@shared/schema";
 
 // modify the interface with any CRUD methods
@@ -246,6 +246,18 @@ export class MemStorage implements IStorage {
           binPalletCapacity = Math.floor(Math.random() * 6) + 2; // 2-7 pallets
         }
         
+        // Determine SKU eligibility 
+        const eligibilityRandom = Math.random();
+        let skuEligibility: SkuEligibilityType = 'AllEligible';
+        
+        if (eligibilityRandom < 0.7) {
+          skuEligibility = 'AllEligible';
+        } else if (eligibilityRandom < 0.9) {
+          skuEligibility = 'MixedEligibility';
+        } else {
+          skuEligibility = 'AllIneligible';
+        }
+        
         // Create the bin object
         const bin: Bin = {
           id: this.currentBinId++,
@@ -255,7 +267,8 @@ export class MemStorage implements IStorage {
           category,
           maxVolume,
           storageHUType: storage.type,
-          binPalletCapacity
+          binPalletCapacity,
+          skuEligibility
         };
         
         // Add to storage

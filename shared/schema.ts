@@ -57,6 +57,7 @@ export type InsertZone = z.infer<typeof insertZoneSchema>;
 export type Zone = typeof zones.$inferSelect;
 
 export type StorageHUType = 'Pallet' | 'Carton' | 'Crate';
+export type SkuEligibilityType = 'AllEligible' | 'MixedEligibility' | 'AllIneligible';
 
 export const bins = pgTable("bins", {
   id: serial("id").primaryKey(),
@@ -67,6 +68,7 @@ export const bins = pgTable("bins", {
   maxVolume: integer("max_volume").notNull(),
   storageHUType: text("storage_hu_type").notNull().$type<StorageHUType>(),
   binPalletCapacity: integer("bin_pallet_capacity"),
+  skuEligibility: text("sku_eligibility").notNull().default('AllEligible').$type<SkuEligibilityType>(),
 });
 
 export const insertBinSchema = createInsertSchema(bins).pick({
@@ -77,6 +79,7 @@ export const insertBinSchema = createInsertSchema(bins).pick({
   maxVolume: true,
   storageHUType: true,
   binPalletCapacity: true,
+  skuEligibility: true,
 });
 
 export type InsertBin = z.infer<typeof insertBinSchema>;

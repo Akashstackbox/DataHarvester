@@ -41,6 +41,13 @@ export default function Legend() {
     { name: "Empty", color: "bg-gradient-to-r from-gray-200 to-gray-300" }
   ];
   
+  // SKU eligibility types
+  const skuEligibilityTypes = [
+    { name: "All Eligible", color: "bg-blue-500" },
+    { name: "Mixed Eligibility", color: "bg-purple-500" },
+    { name: "All Ineligible", color: "bg-red-500" }
+  ];
+  
   return (
     <Collapsible
       open={isOpen}
@@ -76,6 +83,25 @@ export default function Legend() {
                       <span className="text-sm font-medium">{level.name}</span>
                     </div>
                   ))}
+                </div>
+              </div>
+              
+              {/* SKU Eligibility */}
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="text-sm font-bold mb-3 text-gray-800 flex items-center gap-2">
+                  <div className="w-1 h-5 bg-primary rounded-full"></div>
+                  SKU Eligibility
+                </h4>
+                <div className="flex flex-wrap gap-3">
+                  {skuEligibilityTypes.map(type => (
+                    <div key={type.name} className="flex items-center gap-2 bg-white px-2 py-1 rounded-md shadow-sm">
+                      <div className={`w-4 h-4 rounded-full ${type.color}`}></div>
+                      <span className="text-sm font-medium">{type.name}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-2 text-xs text-gray-600 bg-blue-50 p-2 rounded border border-blue-100">
+                  <strong>Note:</strong> SKU eligibility is indicated by a dot in the top-right corner of each bin.
                 </div>
               </div>
               
