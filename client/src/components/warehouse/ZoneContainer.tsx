@@ -9,10 +9,13 @@ interface ZoneContainerProps {
 }
 
 export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContainerProps) {
+  // Set a default collapsed state
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   
-  const toggleExpand = () => {
+  const toggleExpand = (e: React.MouseEvent) => {
     setIsExpanded((prev: boolean) => !prev);
+    // Prevent the event from bubbling up
+    e.stopPropagation();
   };
   
   const zoomStyle = {
@@ -89,7 +92,7 @@ export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContain
   
   return (
     <div 
-      className={`mb-4 ${isExpanded ? '' : 'cursor-pointer transform hover:scale-105 transition-all'}`}
+      className={`mb-4 ${isExpanded ? 'w-full col-span-full md:col-span-2' : 'cursor-pointer transform hover:scale-105 transition-all'}`}
       style={zoomStyle}
       onClick={toggleExpand}
     >
