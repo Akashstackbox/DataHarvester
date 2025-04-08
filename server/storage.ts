@@ -204,168 +204,69 @@ export class MemStorage implements IStorage {
     };
     this.zones.set(zoneC.id, zoneC);
     
-    // Create Bins for Zone A
-    const binsZoneA = [
-      { 
-        binId: "A-01", 
-        utilizationPercent: 23, 
-        category: "Electronics",
-        maxVolume: 2000,
-        storageHUType: "Pallet" as StorageHUType,
-        binPalletCapacity: 4
-      },
-      { 
-        binId: "A-02", 
-        utilizationPercent: 65, 
-        category: "Packaging",
-        maxVolume: 500,
-        storageHUType: "Carton" as StorageHUType
-      },
-      { 
-        binId: "A-03", 
-        utilizationPercent: 87, 
-        category: "Appliances",
-        maxVolume: 400,
-        storageHUType: "Carton" as StorageHUType
-      },
-      { 
-        binId: "A-04", 
-        utilizationPercent: 45, 
-        category: "Office Supplies",
-        maxVolume: 750,
-        storageHUType: "Carton" as StorageHUType
-      },
-      { 
-        binId: "A-05", 
-        utilizationPercent: 95, 
-        category: "Tools",
-        maxVolume: 600,
-        storageHUType: "Carton" as StorageHUType
+    // Helper function to generate multiple bins per zone
+    const generateBins = (zoneId: number, zonePrefix: string, count: number = 50) => {
+      // Define possible categories
+      const categories = [
+        "Electronics", "Packaging", "Appliances", "Office Supplies", "Tools",
+        "Clothing", "Books", "Toys", "Sporting Goods", "Hardware",
+        "Kitchen", "Garden", "Automotive", "Pet Supplies", "Furniture",
+        "Health", "Beauty", "Food", "Beverages", "Art Supplies"
+      ];
+      
+      // Define possible storage types with their parameters
+      const storageTypes = [
+        { type: "Pallet" as StorageHUType, volumes: [1500, 2000, 2500, 3000], hasPalletCapacity: true },
+        { type: "Carton" as StorageHUType, volumes: [300, 400, 500, 600, 750], hasPalletCapacity: false },
+        { type: "Crate" as StorageHUType, volumes: [800, 1000, 1200, 1500, 1800], hasPalletCapacity: false }
+      ];
+      
+      // Generate bins
+      for (let i = 1; i <= count; i++) {
+        // Format bin ID with leading zeros
+        const binIdNum = i.toString().padStart(2, '0');
+        const binId = `${zonePrefix}-${binIdNum}`;
+        
+        // Randomize data for variety
+        const utilizationPercent = Math.floor(Math.random() * 101); // 0-100
+        const categoryIndex = Math.floor(Math.random() * categories.length);
+        const category = categories[categoryIndex];
+        
+        // Select a storage type
+        const storageTypeIndex = Math.floor(Math.random() * storageTypes.length);
+        const storage = storageTypes[storageTypeIndex];
+        
+        // Select a volume from the available options for this storage type
+        const volumeIndex = Math.floor(Math.random() * storage.volumes.length);
+        const maxVolume = storage.volumes[volumeIndex];
+        
+        // Determine pallet capacity if applicable
+        let binPalletCapacity = null;
+        if (storage.hasPalletCapacity) {
+          binPalletCapacity = Math.floor(Math.random() * 6) + 2; // 2-7 pallets
+        }
+        
+        // Create the bin object
+        const bin: Bin = {
+          id: this.currentBinId++,
+          binId,
+          zoneId,
+          utilizationPercent,
+          category,
+          maxVolume,
+          storageHUType: storage.type,
+          binPalletCapacity
+        };
+        
+        // Add to storage
+        this.bins.set(bin.id, bin);
       }
-    ];
+    };
     
-    binsZoneA.forEach(binData => {
-      const bin: Bin = {
-        id: this.currentBinId++,
-        binId: binData.binId,
-        zoneId: zoneA.id,
-        utilizationPercent: binData.utilizationPercent,
-        category: binData.category,
-        maxVolume: binData.maxVolume,
-        storageHUType: binData.storageHUType,
-        binPalletCapacity: binData.binPalletCapacity || null
-      };
-      this.bins.set(bin.id, bin);
-    });
-    
-    // Create Bins for Zone B
-    const binsZoneB = [
-      { 
-        binId: "B-01", 
-        utilizationPercent: 72, 
-        category: "Clothing",
-        maxVolume: 3000,
-        storageHUType: "Pallet" as StorageHUType,
-        binPalletCapacity: 6
-      },
-      { 
-        binId: "B-02", 
-        utilizationPercent: 89, 
-        category: "Books",
-        maxVolume: 1500,
-        storageHUType: "Crate" as StorageHUType
-      },
-      { 
-        binId: "B-03", 
-        utilizationPercent: 58, 
-        category: "Toys",
-        maxVolume: 800,
-        storageHUType: "Carton" as StorageHUType
-      },
-      { 
-        binId: "B-04", 
-        utilizationPercent: 93, 
-        category: "Sporting Goods",
-        maxVolume: 1200,
-        storageHUType: "Crate" as StorageHUType
-      },
-      { 
-        binId: "B-05", 
-        utilizationPercent: 68, 
-        category: "Hardware",
-        maxVolume: 2500,
-        storageHUType: "Pallet" as StorageHUType,
-        binPalletCapacity: 5
-      }
-    ];
-    
-    binsZoneB.forEach(binData => {
-      const bin: Bin = {
-        id: this.currentBinId++,
-        binId: binData.binId,
-        zoneId: zoneB.id,
-        utilizationPercent: binData.utilizationPercent,
-        category: binData.category,
-        maxVolume: binData.maxVolume,
-        storageHUType: binData.storageHUType,
-        binPalletCapacity: binData.binPalletCapacity || null
-      };
-      this.bins.set(bin.id, bin);
-    });
-    
-    // Create Bins for Zone C
-    const binsZoneC = [
-      { 
-        binId: "C-01", 
-        utilizationPercent: 85, 
-        category: "Kitchen",
-        maxVolume: 900,
-        storageHUType: "Carton" as StorageHUType
-      },
-      { 
-        binId: "C-02", 
-        utilizationPercent: 32, 
-        category: "Garden",
-        maxVolume: 2200,
-        storageHUType: "Pallet" as StorageHUType,
-        binPalletCapacity: 4
-      },
-      { 
-        binId: "C-03", 
-        utilizationPercent: 61, 
-        category: "Automotive",
-        maxVolume: 1800,
-        storageHUType: "Crate" as StorageHUType
-      },
-      { 
-        binId: "C-04", 
-        utilizationPercent: 54, 
-        category: "Pet Supplies",
-        maxVolume: 600,
-        storageHUType: "Carton" as StorageHUType
-      },
-      { 
-        binId: "C-05", 
-        utilizationPercent: 0, 
-        category: "Empty",
-        maxVolume: 300,
-        storageHUType: "Carton" as StorageHUType
-      }
-    ];
-    
-    binsZoneC.forEach(binData => {
-      const bin: Bin = {
-        id: this.currentBinId++,
-        binId: binData.binId,
-        zoneId: zoneC.id,
-        utilizationPercent: binData.utilizationPercent,
-        category: binData.category,
-        maxVolume: binData.maxVolume,
-        storageHUType: binData.storageHUType,
-        binPalletCapacity: binData.binPalletCapacity || null
-      };
-      this.bins.set(bin.id, bin);
-    });
+    // Generate 50 bins for each zone
+    generateBins(zoneA.id, "A");
+    generateBins(zoneB.id, "B");
+    generateBins(zoneC.id, "C");
   }
 }
 
