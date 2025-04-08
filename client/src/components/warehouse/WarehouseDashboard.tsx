@@ -212,26 +212,8 @@ export default function WarehouseDashboard({
           {/* Legend */}
           <Legend />
           
-          {/* Analytics */}
-          <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <UtilizationSummary 
-              area={warehouseData}
-              isLoading={isLoading}
-            />
-            
-            <CategoryDistributionChart 
-              distribution={categoryDistribution} 
-              isLoading={isLoading}
-            />
-            
-            <CriticalBins 
-              bins={criticalBins} 
-              isLoading={isLoading}
-            />
-          </div>
-          
           {/* Warehouse Visualization */}
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 gap-6 mb-6">
             {isLoading ? (
               <Card className="p-6 border-0 shadow-lg overflow-hidden relative">
                 <div className="bg-gradient-to-br from-gray-100 to-white absolute inset-0"></div>
@@ -278,6 +260,24 @@ export default function WarehouseDashboard({
                 </Button>
               </Card>
             )}
+          </div>
+          
+          {/* Analytics */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <UtilizationSummary 
+              area={warehouseData}
+              isLoading={isLoading}
+            />
+            
+            <CategoryDistributionChart 
+              distribution={categoryDistribution} 
+              isLoading={isLoading}
+            />
+            
+            <CriticalBins 
+              bins={criticalBins} 
+              isLoading={isLoading}
+            />
           </div>
         </div>
       </main>
