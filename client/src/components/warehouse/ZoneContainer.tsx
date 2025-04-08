@@ -169,7 +169,7 @@ export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContain
         </div>
       ) : (
         // Collapsed Cube View
-        <div className={`${getUtilizationColor(zone.utilization).replace('bg-', 'border-')} border-2 rounded-xl`}>
+        <div className={`${getUtilizationColor(zone.utilization).replace('bg-', 'border-')} border-2 rounded-xl max-w-[200px]`}>
           {viewType === "grid" ? (
             <div 
               className={`${bgGradient.replace('-50', '-200')} aspect-square w-full rounded-lg shadow-md flex flex-col justify-between p-2 relative overflow-hidden`}

@@ -139,7 +139,7 @@ export default function AreaContainer({ area, selectedZone, viewType, zoomLevel 
       <div className="bg-gray-50 p-6">
         <div className={`${borderStyle} ${borderColor} rounded-lg p-3`}>
           {/* Show zones in a flexible grid that adjusts based on collapsed/expanded state */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 grid-flow-row">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 grid-flow-row">
             {filteredZones.map(zone => (
               <ZoneContainer 
                 key={zone.id} 
