@@ -135,20 +135,20 @@ export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContain
             ) : (
               <div className="divide-y divide-gray-100 rounded-lg border border-gray-100 overflow-hidden">
                 {zone.bins.map(bin => (
-                  <div key={bin.id} className="py-3 px-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
-                    <div className="flex items-center gap-3">
+                  <div key={bin.id} className="py-3 px-4 flex flex-wrap items-center justify-between hover:bg-gray-50 transition-colors">
+                    <div className="flex items-center gap-3 min-w-[200px] mb-2 sm:mb-0">
                       <BinUtilizationIndicator utilizationPercent={bin.utilizationPercent} />
                       <span className="font-medium text-gray-800">{bin.binId}</span>
                       <span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-700 rounded-full font-medium">{bin.storageHUType}</span>
                     </div>
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-wrap items-center gap-3 justify-end flex-1">
                       <span className="text-sm font-medium text-gray-600">{bin.category}</span>
-                      <div className="px-2 py-1 bg-gray-50 rounded text-xs">
+                      <div className="px-2 py-1 bg-gray-50 rounded text-xs whitespace-nowrap">
                         <span className="text-gray-600">Vol: </span>
                         <span className="font-medium">{bin.maxVolume}</span>
                       </div>
                       {bin.binPalletCapacity && (
-                        <div className="px-2 py-1 bg-gray-50 rounded text-xs">
+                        <div className="px-2 py-1 bg-gray-50 rounded text-xs whitespace-nowrap">
                           <span className="text-gray-600">Pallets: </span>
                           <span className="font-medium">{bin.binPalletCapacity}</span>
                         </div>
@@ -159,7 +159,7 @@ export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContain
                           style={{ width: `${bin.utilizationPercent}%` }}
                         ></div>
                       </div>
-                      <span className="text-sm font-bold">{bin.utilizationPercent}%</span>
+                      <span className="text-sm font-bold whitespace-nowrap">{bin.utilizationPercent}%</span>
                     </div>
                   </div>
                 ))}
