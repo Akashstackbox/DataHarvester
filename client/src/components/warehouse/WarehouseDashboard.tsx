@@ -88,7 +88,7 @@ export default function WarehouseDashboard({
                 <Box className="h-6 w-6" />
               </div>
               <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent">
-                Visual Warehouse
+                CoreBox
               </h1>
             </div>
             
@@ -327,7 +327,7 @@ export default function WarehouseDashboard({
             </div>
           </div>
           <div className="text-sm text-gray-400 mt-2 sm:mt-0 font-medium">
-            Visual Warehouse Management System v1.0
+            CoreBox Management System v1.0
           </div>
         </div>
       </footer>
