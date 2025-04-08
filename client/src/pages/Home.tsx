@@ -8,7 +8,7 @@ export default function Home() {
   const { toast } = useToast();
   const [selectedArea, setSelectedArea] = useState<number>(1); // Default to first area (Inventory)
   
-  const { data: warehouseData, isLoading: isLoadingWarehouse, refetch: refetchWarehouse } = useQuery<AreaWithZonesAndBins>({
+  const { data: warehouseData, isLoading: isLoadingWarehouse, refetch: refetchWarehouse } = useQuery<AreaWithZonesAndBins[]>({
     queryKey: ['/api/warehouse'],
     queryFn: async () => {
       // Temporarily use the default warehouse data endpoint while debugging

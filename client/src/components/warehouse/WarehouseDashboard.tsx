@@ -244,7 +244,7 @@ export default function WarehouseDashboard({
           
           {/* Warehouse Visualization */}
           <div className="grid grid-cols-1 gap-6 mb-6">
-            {isLoading ? (
+            {isLoading || !warehouseData ? (
               <Card className="p-6 border-0 shadow-lg overflow-hidden relative">
                 <div className="bg-gradient-to-br from-gray-100 to-white absolute inset-0"></div>
                 <div className="relative">
