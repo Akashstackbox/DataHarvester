@@ -22,7 +22,7 @@ import CriticalBins from "./CriticalBins";
 import TimeBasedHeatmap from "./TimeBasedHeatmap";
 
 interface WarehouseDashboardProps {
-  warehouseData?: AreaWithZonesAndBins[];
+  warehouseData?: AreaWithZonesAndBins;
   criticalBins?: Bin[];
   categoryDistribution?: CategoryDistribution[];
   isLoading: boolean;
@@ -244,7 +244,7 @@ export default function WarehouseDashboard({
           
           {/* Warehouse Visualization */}
           <div className="grid grid-cols-1 gap-6 mb-6">
-            {isLoading || !warehouseData ? (
+            {isLoading ? (
               <Card className="p-6 border-0 shadow-lg overflow-hidden relative">
                 <div className="bg-gradient-to-br from-gray-100 to-white absolute inset-0"></div>
                 <div className="relative">
@@ -266,17 +266,12 @@ export default function WarehouseDashboard({
                 </div>
               </Card>
             ) : warehouseData ? (
-              <div className="space-y-6">
-                {warehouseData.map(area => (
-                  <AreaContainer 
-                    key={area.id}
-                    area={area} 
-                    selectedZone={selectedZone}
-                    viewType={viewType}
-                    zoomLevel={zoomLevel}
-                  />
-                ))}
-              </div>
+              <AreaContainer 
+                area={warehouseData} 
+                selectedZone={selectedZone}
+                viewType={viewType}
+                zoomLevel={zoomLevel}
+              />
             ) : (
               <Card className="p-12 text-center border-0 shadow-lg">
                 <div className="bg-gray-50 w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4">

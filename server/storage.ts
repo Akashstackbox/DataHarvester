@@ -67,29 +67,8 @@ export class MemStorage implements IStorage {
   }
 
   // Warehouse data methods
-  async getWarehouseData(): Promise<AreaWithZonesAndBins[]> {
-    const areas = Array.from(this.areas.values());
-    const result: AreaWithZonesAndBins[] = [];
-    
-    for (const area of areas) {
-      const zonesWithBins: ZoneWithBins[] = [];
-      const zonesList = await this.getZonesByAreaId(area.id);
-      
-      for (const zone of zonesList) {
-        const bins = await this.getBinsByZoneId(zone.id);
-        zonesWithBins.push({
-          ...zone,
-          bins
-        });
-      }
-      
-      result.push({
-        ...area,
-        zones: zonesWithBins
-      });
-    }
-    
-    return result;
+  async getWarehouseData(): Promise<AreaWithZonesAndBins> {
+    return this.getWarehouseDataByAreaId(1); // Default to first area (Inventory)
   }
 
   async getWarehouseDataByAreaId(areaId: number): Promise<AreaWithZonesAndBins> {
