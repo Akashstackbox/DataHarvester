@@ -175,14 +175,22 @@ export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContain
               className={`${bgGradient.replace('-50', '-200')} aspect-square w-full rounded-lg shadow-md flex flex-col justify-between p-2 relative overflow-hidden`}
             >
               <div className="flex flex-col h-full">
-                <div className="flex justify-between items-start">
-                  <div className={`text-[10px] font-bold ${textColor}`}>{zone.name}</div>
-                  <div className={`text-[10px] font-semibold ${textColor} bg-white/70 rounded-full px-1 py-0.5`}>
-                    {zone.utilization}%
-                  </div>
-                </div>
                 <div className="flex-1 flex items-center justify-center">
                   <div className={`text-xl font-bold ${textColor}`}>{zone.name.replace('Zone ', '')}</div>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center justify-between">
+                    <div className={`text-[10px] font-bold ${textColor}`}>{zone.name}</div>
+                    <div className={`text-[10px] font-semibold ${textColor}`}>
+                      {zone.utilization}%
+                    </div>
+                  </div>
+                  <div className="w-full h-1 bg-white/30 rounded-full overflow-hidden">
+                    <div 
+                      className={`h-full ${getUtilizationColor(zone.utilization)}`}
+                      style={{ width: `${zone.utilization}%` }}
+                    ></div>
+                  </div>
                 </div>
               </div>
             </div>
