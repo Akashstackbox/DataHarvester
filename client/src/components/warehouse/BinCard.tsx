@@ -64,18 +64,18 @@ export default function BinCard({ bin }: BinCardProps) {
       
       {/* Ultra compact tooltip for small bins */}
       <div className="absolute inset-0 bg-white/95 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center items-center p-0.5 text-center shadow-inner z-10">
-        <div className="text-xs font-semibold text-primary leading-tight">{binId}</div>
-        <div className="text-[9px] leading-tight mt-0.5">{utilizationPercent}%</div>
+        <div className="text-xs font-bold text-primary leading-tight">{binId}</div>
+        <div className="text-[10px] font-semibold leading-tight mt-0.5">{utilizationPercent}%</div>
         
         <div className="flex flex-wrap justify-center gap-x-1 mt-0.5">
-          <div className="text-[9px] leading-tight px-1 bg-gray-100 rounded text-gray-700">{storageHUType}</div>
-          <div className="text-[9px] leading-tight">V:{maxVolume}</div>
+          <div className="text-[10px] font-medium leading-tight px-1 bg-gray-100 rounded text-gray-700">{storageHUType}</div>
+          <div className="text-[10px] font-medium leading-tight">V:{maxVolume}</div>
           {binPalletCapacity && (
-            <div className="text-[9px] leading-tight">P:{binPalletCapacity}</div>
+            <div className="text-[10px] font-medium leading-tight">P:{binPalletCapacity}</div>
           )}
         </div>
         
-        <div className="mt-0.5 text-[9px] bg-blue-100 text-blue-800 rounded px-1 py-px leading-tight w-full max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
+        <div className="mt-0.5 text-[10px] font-medium bg-blue-100 text-blue-800 rounded px-1 py-px leading-tight w-full max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
           {shortenedCategory}
         </div>
       </div>
