@@ -15,6 +15,7 @@ export interface IStorage {
   
   // Warehouse data methods
   getWarehouseData(): Promise<AreaWithZonesAndBins>;
+  getWarehouseDataByAreaId(areaId: number): Promise<AreaWithZonesAndBins>;
   getAreaById(id: number): Promise<Area | undefined>;
   getZoneById(id: number): Promise<Zone | undefined>;
   getZonesByAreaId(areaId: number): Promise<Zone[]>;
@@ -67,9 +68,13 @@ export class MemStorage implements IStorage {
   
   // Warehouse data methods
   async getWarehouseData(): Promise<AreaWithZonesAndBins> {
-    const area = this.areas.get(1);
+    return this.getWarehouseDataByAreaId(1); // Default to first area (Inventory)
+  }
+  
+  async getWarehouseDataByAreaId(areaId: number): Promise<AreaWithZonesAndBins> {
+    const area = this.areas.get(areaId);
     if (!area) {
-      throw new Error("Area not found");
+      throw new Error(`Area with ID ${areaId} not found`);
     }
     
     const zonesWithBins: ZoneWithBins[] = [];
@@ -136,13 +141,13 @@ export class MemStorage implements IStorage {
   
   private seedWarehouseData() {
     // Create Areas (based on requirements)
-    const northCampus: Area = {
+    const inventoryArea: Area = {
       id: this.currentAreaId++,
-      name: "North Campus",
+      name: "Inventory",
       areaType: "Inventory" as AreaType,
       overallUtilization: 55
     };
-    this.areas.set(northCampus.id, northCampus);
+    this.areas.set(inventoryArea.id, inventoryArea);
     
     const returnArea: Area = {
       id: this.currentAreaId++,
@@ -168,41 +173,153 @@ export class MemStorage implements IStorage {
     };
     this.areas.set(stagingArea.id, stagingArea);
     
-    const damageArea: Area = {
-      id: this.currentAreaId++,
-      name: "Damage",
-      areaType: "Damage" as AreaType,
-      overallUtilization: 20
-    };
-    this.areas.set(damageArea.id, damageArea);
-    
-    // Create Zones
-    const zoneA: Zone = {
+    // Create Zones for Inventory Area
+    const zoneA1: Zone = {
       id: this.currentZoneId++,
-      name: "Zone A",
-      areaId: northCampus.id,
+      name: "Zone A1",
+      areaId: inventoryArea.id,
       faceType: "Pick" as FaceType,
       utilization: 68
     };
-    this.zones.set(zoneA.id, zoneA);
+    this.zones.set(zoneA1.id, zoneA1);
     
-    const zoneB: Zone = {
+    const zoneA2: Zone = {
       id: this.currentZoneId++,
-      name: "Zone B",
-      areaId: northCampus.id,
+      name: "Zone A2",
+      areaId: inventoryArea.id,
       faceType: "Reserve" as FaceType,
       utilization: 78
     };
-    this.zones.set(zoneB.id, zoneB);
+    this.zones.set(zoneA2.id, zoneA2);
     
-    const zoneC: Zone = {
+    const zoneA3: Zone = {
       id: this.currentZoneId++,
-      name: "Zone C",
-      areaId: northCampus.id,
+      name: "Zone A3",
+      areaId: inventoryArea.id,
       faceType: "Pick" as FaceType,
       utilization: 65
     };
-    this.zones.set(zoneC.id, zoneC);
+    this.zones.set(zoneA3.id, zoneA3);
+    
+    const zoneA4: Zone = {
+      id: this.currentZoneId++,
+      name: "Zone A4",
+      areaId: inventoryArea.id,
+      faceType: "Reserve" as FaceType,
+      utilization: 42
+    };
+    this.zones.set(zoneA4.id, zoneA4);
+    
+    // Create Zones for Returns Area
+    const zoneB1: Zone = {
+      id: this.currentZoneId++,
+      name: "Zone B1",
+      areaId: returnArea.id,
+      faceType: "Pick" as FaceType,
+      utilization: 75
+    };
+    this.zones.set(zoneB1.id, zoneB1);
+    
+    const zoneB2: Zone = {
+      id: this.currentZoneId++,
+      name: "Zone B2",
+      areaId: returnArea.id,
+      faceType: "Reserve" as FaceType,
+      utilization: 82
+    };
+    this.zones.set(zoneB2.id, zoneB2);
+    
+    const zoneB3: Zone = {
+      id: this.currentZoneId++,
+      name: "Zone B3",
+      areaId: returnArea.id,
+      faceType: "Pick" as FaceType,
+      utilization: 85
+    };
+    this.zones.set(zoneB3.id, zoneB3);
+    
+    const zoneB4: Zone = {
+      id: this.currentZoneId++,
+      name: "Zone B4",
+      areaId: returnArea.id,
+      faceType: "Reserve" as FaceType,
+      utilization: 80
+    };
+    this.zones.set(zoneB4.id, zoneB4);
+    
+    // Create Zones for Overflow Area
+    const zoneC1: Zone = {
+      id: this.currentZoneId++,
+      name: "Zone C1",
+      areaId: overflowArea.id,
+      faceType: "Pick" as FaceType,
+      utilization: 30
+    };
+    this.zones.set(zoneC1.id, zoneC1);
+    
+    const zoneC2: Zone = {
+      id: this.currentZoneId++,
+      name: "Zone C2",
+      areaId: overflowArea.id,
+      faceType: "Reserve" as FaceType,
+      utilization: 25
+    };
+    this.zones.set(zoneC2.id, zoneC2);
+    
+    const zoneC3: Zone = {
+      id: this.currentZoneId++,
+      name: "Zone C3",
+      areaId: overflowArea.id,
+      faceType: "Pick" as FaceType,
+      utilization: 40
+    };
+    this.zones.set(zoneC3.id, zoneC3);
+    
+    const zoneC4: Zone = {
+      id: this.currentZoneId++,
+      name: "Zone C4",
+      areaId: overflowArea.id,
+      faceType: "Reserve" as FaceType,
+      utilization: 38
+    };
+    this.zones.set(zoneC4.id, zoneC4);
+    
+    // Create Zones for Staging Area
+    const zoneD1: Zone = {
+      id: this.currentZoneId++,
+      name: "Zone D1",
+      areaId: stagingArea.id,
+      faceType: "Pick" as FaceType,
+      utilization: 60
+    };
+    this.zones.set(zoneD1.id, zoneD1);
+    
+    const zoneD2: Zone = {
+      id: this.currentZoneId++,
+      name: "Zone D2",
+      areaId: stagingArea.id,
+      faceType: "Reserve" as FaceType,
+      utilization: 55
+    };
+    this.zones.set(zoneD2.id, zoneD2);
+    
+    const zoneD3: Zone = {
+      id: this.currentZoneId++,
+      name: "Zone D3",
+      areaId: stagingArea.id,
+      faceType: "Pick" as FaceType,
+      utilization: 62
+    };
+    this.zones.set(zoneD3.id, zoneD3);
+    
+    const zoneD4: Zone = {
+      id: this.currentZoneId++,
+      name: "Zone D4",
+      areaId: stagingArea.id,
+      faceType: "Reserve" as FaceType,
+      utilization: 65
+    };
+    this.zones.set(zoneD4.id, zoneD4);
     
     // Helper function to generate multiple bins per zone
     const generateBins = (zoneId: number, zonePrefix: string, count: number = 50) => {
@@ -276,10 +393,29 @@ export class MemStorage implements IStorage {
       }
     };
     
-    // Generate 50 bins for each zone
-    generateBins(zoneA.id, "A");
-    generateBins(zoneB.id, "B");
-    generateBins(zoneC.id, "C");
+    // Generate bins for Inventory Area zones
+    generateBins(zoneA1.id, "A1");
+    generateBins(zoneA2.id, "A2");
+    generateBins(zoneA3.id, "A3");
+    generateBins(zoneA4.id, "A4");
+    
+    // Generate bins for Returns Area zones
+    generateBins(zoneB1.id, "B1");
+    generateBins(zoneB2.id, "B2");
+    generateBins(zoneB3.id, "B3");
+    generateBins(zoneB4.id, "B4");
+    
+    // Generate bins for Overflow Area zones
+    generateBins(zoneC1.id, "C1");
+    generateBins(zoneC2.id, "C2");
+    generateBins(zoneC3.id, "C3");
+    generateBins(zoneC4.id, "C4");
+    
+    // Generate bins for Staging Area zones
+    generateBins(zoneD1.id, "D1");
+    generateBins(zoneD2.id, "D2");
+    generateBins(zoneD3.id, "D3");
+    generateBins(zoneD4.id, "D4");
   }
 }
 

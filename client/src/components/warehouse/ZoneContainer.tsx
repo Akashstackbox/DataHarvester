@@ -12,32 +12,92 @@ export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContain
     fontSize: `${zoomLevel / 100}rem`,
   };
   
-  // Background gradient for zone header based on face type
-  const bgGradient = zone.faceType === "Pick" 
-    ? "bg-gradient-to-r from-blue-50 to-indigo-50" 
-    : "bg-gradient-to-r from-emerald-50 to-teal-50";
+  // Get styles based on areaId and face type
+  let bgGradient = "bg-gradient-to-r from-blue-50 to-indigo-50";
+  let borderColor = "border-blue-200";
+  let textColor = "text-blue-800";
+  let shadowColor = "shadow-blue-100";
+  
+  // For Pick zones
+  if (zone.faceType === "Pick") {
+    switch (zone.areaId) {
+      case 1: // Inventory
+        bgGradient = "bg-gradient-to-r from-blue-50 to-indigo-50";
+        borderColor = "border-blue-200";
+        textColor = "text-blue-800";
+        shadowColor = "shadow-blue-100";
+        break;
+      case 2: // Returns
+        bgGradient = "bg-gradient-to-r from-amber-50 to-orange-50";
+        borderColor = "border-amber-200";
+        textColor = "text-amber-800";
+        shadowColor = "shadow-amber-100";
+        break;
+      case 3: // Overflow
+        bgGradient = "bg-gradient-to-r from-violet-50 to-purple-50";
+        borderColor = "border-violet-200";
+        textColor = "text-violet-800";
+        shadowColor = "shadow-violet-100";
+        break;
+      case 4: // Staging
+        bgGradient = "bg-gradient-to-r from-emerald-50 to-teal-50";
+        borderColor = "border-emerald-200";
+        textColor = "text-emerald-800";
+        shadowColor = "shadow-emerald-100";
+        break;
+    }
+  } 
+  // For Reserve zones
+  else {
+    switch (zone.areaId) {
+      case 1: // Inventory
+        bgGradient = "bg-gradient-to-r from-indigo-50 to-blue-50";
+        borderColor = "border-indigo-200";
+        textColor = "text-indigo-800";
+        shadowColor = "shadow-indigo-100";
+        break;
+      case 2: // Returns
+        bgGradient = "bg-gradient-to-r from-orange-50 to-amber-50";
+        borderColor = "border-orange-200";
+        textColor = "text-orange-800";
+        shadowColor = "shadow-orange-100";
+        break;
+      case 3: // Overflow
+        bgGradient = "bg-gradient-to-r from-purple-50 to-violet-50";
+        borderColor = "border-purple-200";
+        textColor = "text-purple-800";
+        shadowColor = "shadow-purple-100";
+        break;
+      case 4: // Staging
+        bgGradient = "bg-gradient-to-r from-teal-50 to-emerald-50";
+        borderColor = "border-teal-200";
+        textColor = "text-teal-800";
+        shadowColor = "shadow-teal-100";
+        break;
+    }
+  }
     
   // Icon based on face type
   const faceTypeIcon = zone.faceType === "Pick" ? "🔍" : "🔋";
   
   return (
-    <div className="border border-gray-200 rounded-lg mb-4 shadow-sm overflow-hidden" style={zoomStyle}>
+    <div className={`border ${borderColor} rounded-lg mb-4 ${shadowColor} shadow-sm overflow-hidden`} style={zoomStyle}>
       <div className={`${bgGradient} px-5 py-4 flex justify-between items-center`}>
         <div className="flex items-center gap-3">
-          <div className="bg-white/80 rounded-full h-8 w-8 flex items-center justify-center shadow-sm">
+          <div className={`bg-white/80 rounded-full h-8 w-8 flex items-center justify-center ${shadowColor} shadow-sm`}>
             <span className="text-lg">{faceTypeIcon}</span>
           </div>
           <div>
-            <h3 className="font-bold text-gray-800">{zone.name}</h3>
+            <h3 className={`font-bold ${textColor}`}>{zone.name}</h3>
             <div className="flex items-center gap-2 mt-0.5">
-              <span className="text-xs px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full font-medium">{zone.faceType}</span>
+              <span className={`text-xs px-2 py-0.5 ${bgGradient.replace('-50', '-100')} ${textColor} rounded-full font-medium`}>{zone.faceType}</span>
               <span className="text-xs text-gray-500">|</span>
               <span className="text-xs text-gray-600">{zone.bins.length} bins</span>
             </div>
           </div>
         </div>
         <div className="flex flex-col items-end">
-          <div className="text-sm font-bold text-gray-800">{zone.utilization}% utilized</div>
+          <div className={`text-sm font-bold ${textColor}`}>{zone.utilization}% utilized</div>
           <div className="w-32 h-2 bg-gray-200 rounded-full mt-1 overflow-hidden">
             <div 
               className={`h-full rounded-full ${getUtilizationColor(zone.utilization)}`}

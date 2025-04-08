@@ -16,6 +16,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Get warehouse data for a specific area
+  app.get("/api/warehouse/area/:areaId", async (req, res) => {
+    try {
+      const areaId = parseInt(req.params.areaId);
+      if (isNaN(areaId)) {
+        return res.status(400).json({ message: "Invalid area ID" });
+      }
+      
+      const warehouseData = await storage.getWarehouseDataByAreaId(areaId);
+      res.json(warehouseData);
+    } catch (error) {
+      console.error(`Error fetching warehouse data for area ${req.params.areaId}:`, error);
+      res.status(500).json({ message: "Failed to fetch warehouse data for the specified area" });
+    }
+  });
+  
   // Get bins that are above a certain threshold (critical bins)
   app.get("/api/warehouse/critical-bins", async (req, res) => {
     try {

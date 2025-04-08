@@ -27,31 +27,45 @@ export default function AreaContainer({ area, selectedZone, viewType, zoomLevel 
   // Get color scheme based on area type
   let bgGradient = "";
   let accentColor = "";
+  let borderColor = "";
+  let borderStyle = "";
   
   switch (area.areaType) {
     case "Inventory":
       bgGradient = "bg-gradient-to-r from-blue-600 to-indigo-700";
       accentColor = "bg-blue-500";
+      borderColor = "border-blue-400";
+      borderStyle = "border-2 border-dashed";
       break;
     case "Returns":
       bgGradient = "bg-gradient-to-r from-amber-600 to-orange-700";
       accentColor = "bg-amber-500";
+      borderColor = "border-amber-400";
+      borderStyle = "border-2 border-dotted";
       break;
     case "Overflow":
       bgGradient = "bg-gradient-to-r from-violet-600 to-purple-700";
       accentColor = "bg-violet-500";
+      borderColor = "border-violet-400";
+      borderStyle = "border-2";
       break;
     case "Staging":
       bgGradient = "bg-gradient-to-r from-emerald-600 to-teal-700";
       accentColor = "bg-emerald-500";
+      borderColor = "border-emerald-400";
+      borderStyle = "border-2 border-double";
       break;
     case "Damage":
       bgGradient = "bg-gradient-to-r from-rose-600 to-red-700";
       accentColor = "bg-rose-500";
+      borderColor = "border-rose-400";
+      borderStyle = "border-2";
       break;
     default:
       bgGradient = "bg-gradient-to-r from-gray-600 to-gray-700";
       accentColor = "bg-gray-500";
+      borderColor = "border-gray-400";
+      borderStyle = "border-2";
   }
   
   // Calculate utilization color
@@ -67,7 +81,7 @@ export default function AreaContainer({ area, selectedZone, viewType, zoomLevel 
   }
   
   return (
-    <Card className="shadow-md border-0 overflow-hidden mb-8">
+    <Card className={`shadow-md overflow-hidden mb-8 ${borderStyle} ${borderColor} rounded-lg`}>
       <div className={`${bgGradient} text-white p-6 relative overflow-hidden`}>
         {/* Background decorative elements */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
@@ -105,20 +119,22 @@ export default function AreaContainer({ area, selectedZone, viewType, zoomLevel 
       </div>
       
       <div className="bg-gray-50 p-6">
-        {filteredZones.map(zone => (
-          <ZoneContainer 
-            key={zone.id} 
-            zone={zone} 
-            viewType={viewType}
-            zoomLevel={zoomLevel}
-          />
-        ))}
-        
-        {filteredZones.length === 0 && (
-          <div className="text-center py-8 text-gray-500">
-            <p>No zones match the selected filter.</p>
-          </div>
-        )}
+        <div className={`grid grid-cols-1 lg:grid-cols-2 gap-6 ${borderStyle} ${borderColor} rounded-lg p-3`}>
+          {filteredZones.map(zone => (
+            <ZoneContainer 
+              key={zone.id} 
+              zone={zone} 
+              viewType={viewType}
+              zoomLevel={zoomLevel}
+            />
+          ))}
+          
+          {filteredZones.length === 0 && (
+            <div className="text-center py-8 text-gray-500 col-span-full">
+              <p>No zones match the selected filter.</p>
+            </div>
+          )}
+        </div>
       </div>
     </Card>
   );

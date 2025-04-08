@@ -27,6 +27,7 @@ interface WarehouseDashboardProps {
   categoryDistribution?: CategoryDistribution[];
   isLoading: boolean;
   onRefresh: () => void;
+  onAreaChange?: (areaId: number) => void;
 }
 
 export default function WarehouseDashboard({ 
@@ -34,9 +35,11 @@ export default function WarehouseDashboard({
   criticalBins,
   categoryDistribution,
   isLoading, 
-  onRefresh 
+  onRefresh,
+  onAreaChange
 }: WarehouseDashboardProps) {
   const [viewType, setViewType] = useState<"grid" | "list">("grid");
+  const [selectedArea, setSelectedArea] = useState<number>(1); // Default to first area (Inventory)
   const [selectedZone, setSelectedZone] = useState<string>("all");
   const [zoomLevel, setZoomLevel] = useState<number>(100);
   
@@ -165,6 +168,29 @@ export default function WarehouseDashboard({
               </div>
               
               <div className="flex items-center gap-2 border-l border-gray-200 pl-3">
+                <label className="text-sm text-gray-500">Area:</label>
+                <select 
+                  className="px-3 py-1.5 text-sm rounded-md border border-gray-200 bg-white shadow-sm"
+                  value={selectedArea}
+                  onChange={(e) => {
+                    const newAreaId = Number(e.target.value);
+                    setSelectedArea(newAreaId);
+                    setSelectedZone("all"); // Reset zone selection when changing area
+                    // Call the parent's onAreaChange handler if provided
+                    if (onAreaChange) {
+                      onAreaChange(newAreaId);
+                    }
+                  }}
+                >
+                  {/* Get all unique areas from the API response */}
+                  <option value={1}>Inventory</option>
+                  <option value={2}>Returns</option>
+                  <option value={3}>Overflow</option>
+                  <option value={4}>Staging</option>
+                </select>
+              </div>
+              
+              <div className="flex items-center gap-2 border-l border-gray-200 pl-3">
                 <label className="text-sm text-gray-500">Zone:</label>
                 <select 
                   className="px-3 py-1.5 text-sm rounded-md border border-gray-200 bg-white shadow-sm"
@@ -172,11 +198,14 @@ export default function WarehouseDashboard({
                   onChange={(e) => setSelectedZone(e.target.value)}
                 >
                   <option value="all">All Zones</option>
-                  {warehouseData?.zones.map(zone => (
-                    <option key={zone.id} value={zone.name}>
-                      {zone.name} ({zone.bins.length} bins)
-                    </option>
-                  ))}
+                  {warehouseData?.zones
+                    .filter(zone => selectedArea === 0 || zone.areaId === selectedArea)
+                    .map(zone => (
+                      <option key={zone.id} value={zone.name}>
+                        {zone.name} ({zone.bins.length} bins)
+                      </option>
+                    ))
+                  }
                 </select>
               </div>
             </div>

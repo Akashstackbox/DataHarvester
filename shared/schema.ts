@@ -97,6 +97,7 @@ export type AreaWithZonesAndBins = {
 export type ZoneWithBins = {
   id: number;
   name: string;
+  areaId: number;
   faceType: FaceType;
   utilization: number;
   bins: Bin[];

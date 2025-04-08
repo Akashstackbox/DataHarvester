@@ -2,12 +2,21 @@ import { useQuery } from "@tanstack/react-query";
 import { AreaWithZonesAndBins, Bin, CategoryDistribution } from "@shared/schema";
 import WarehouseDashboard from "@/components/warehouse/WarehouseDashboard";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 export default function Home() {
   const { toast } = useToast();
+  const [selectedArea, setSelectedArea] = useState<number>(1); // Default to first area (Inventory)
   
   const { data: warehouseData, isLoading: isLoadingWarehouse, refetch: refetchWarehouse } = useQuery<AreaWithZonesAndBins>({
-    queryKey: ['/api/warehouse'],
+    queryKey: ['/api/warehouse/area', selectedArea],
+    queryFn: async () => {
+      const response = await fetch(`/api/warehouse/area/${selectedArea}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch warehouse data');
+      }
+      return response.json();
+    }
   });
   
   const { data: criticalBins, isLoading: isLoadingCritical } = useQuery<Bin[]>({
@@ -34,6 +43,10 @@ export default function Home() {
     }
   };
   
+  const handleAreaChange = (areaId: number) => {
+    setSelectedArea(areaId);
+  };
+  
   const isLoading = isLoadingWarehouse || isLoadingCritical || isLoadingCategories;
   
   return (
@@ -43,6 +56,7 @@ export default function Home() {
       categoryDistribution={categoryDistribution}
       isLoading={isLoading}
       onRefresh={handleRefresh}
+      onAreaChange={handleAreaChange}
     />
   );
 }
