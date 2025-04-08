@@ -21,9 +21,34 @@ export default function TimeBasedHeatmap({ isLoading }: TimeBasedHeatmapProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   
-  // Current hour for highlighting
-  const currentHour = new Date().getHours();
-  const currentTimeString = `${currentHour.toString().padStart(2, '0')}:00`;
+  // Current time state and ref for updates
+  const [currentHour, setCurrentHour] = useState(new Date().getHours());
+  const [currentTimeString, setCurrentTimeString] = useState(`${new Date().getHours().toString().padStart(2, '0')}:00`);
+  const timeUpdateInterval = useRef<NodeJS.Timeout>();
+
+  // Update current time every minute
+  useEffect(() => {
+    const updateCurrentTime = () => {
+      const now = new Date();
+      setCurrentHour(now.getHours());
+      setCurrentTimeString(`${now.getHours().toString().padStart(2, '0')}:00`);
+    };
+
+    timeUpdateInterval.current = setInterval(updateCurrentTime, 60000);
+    return () => {
+      if (timeUpdateInterval.current) {
+        clearInterval(timeUpdateInterval.current);
+      }
+    };
+  }, []);
+
+  // Double click handler for resetting to current time
+  const handleDoubleClick = () => {
+    const now = new Date();
+    setCurrentHour(now.getHours());
+    setCurrentTimeString(`${now.getHours().toString().padStart(2, '0')}:00`);
+    scrollToCurrent();
+  };
   
   // Mock data for the time-based heatmap
   const generateMockTimeData = (): ZoneTimeData[] => {
@@ -280,11 +305,13 @@ export default function TimeBasedHeatmap({ isLoading }: TimeBasedHeatmapProps) {
               <div className="h-3 bg-gradient-to-r from-indigo-200 via-blue-200 to-purple-200 rounded-full mt-3 relative">
                 {/* Current time marker */}
                 <div 
-                  className="absolute top-1/2 -translate-y-1/2 w-2 h-6 bg-blue-600 rounded-full shadow-md"
+                  className="absolute top-1/2 -translate-y-1/2 w-2 h-6 bg-blue-600 rounded-full shadow-md cursor-pointer"
                   style={{ 
                     left: `${(currentHour / 24) * 100}%`, 
                     transform: 'translate(-50%, -50%)'
                   }}
+                  onDoubleClick={handleDoubleClick}
+                  title="Double-click to reset to current time"
                 >
                   <div className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[10px] bg-blue-600 text-white px-1 py-0.5 rounded-sm">
                     Now
