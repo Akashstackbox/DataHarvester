@@ -58,7 +58,7 @@ export default function BinCard({ bin }: BinCardProps) {
   return (
     <div className={`${bgGradient} rounded-lg shadow-md overflow-hidden relative group hover:shadow-lg transition-all duration-300`}>
       {/* SKU Eligibility indicator */}
-      <div className={`absolute top-0 right-0 w-2 h-2 ${eligibilityColor} rounded-full m-1 z-10`}></div>
+      <div className={`absolute top-0 right-0 w-2 h-2 ${eligibilityColor} rounded-full m-1 z-5`}></div>
       <div className="p-3">
         <div className="flex justify-between items-center">
           <div className={`font-bold text-sm ${textColor}`}>{binId}</div>
@@ -77,7 +77,7 @@ export default function BinCard({ bin }: BinCardProps) {
       </div>
       
       {/* Ultra compact tooltip for small bins */}
-      <div className="absolute inset-0 bg-white/95 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center items-center p-0.5 text-center shadow-inner z-10">
+      <div className="absolute inset-0 bg-white/95 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center items-center p-0.5 text-center shadow-inner z-5">
         <div className="text-xs font-bold text-primary leading-tight">{binId}</div>
         <div className="text-[10px] font-semibold leading-tight mt-0.5">{utilizationPercent}%</div>
         
