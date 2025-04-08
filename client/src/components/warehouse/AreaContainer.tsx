@@ -119,21 +119,24 @@ export default function AreaContainer({ area, selectedZone, viewType, zoomLevel 
       </div>
       
       <div className="bg-gray-50 p-6">
-        <div className={`grid grid-cols-1 lg:grid-cols-2 gap-6 ${borderStyle} ${borderColor} rounded-lg p-3`}>
-          {filteredZones.map(zone => (
-            <ZoneContainer 
-              key={zone.id} 
-              zone={zone} 
-              viewType={viewType}
-              zoomLevel={zoomLevel}
-            />
-          ))}
-          
-          {filteredZones.length === 0 && (
-            <div className="text-center py-8 text-gray-500 col-span-full">
-              <p>No zones match the selected filter.</p>
-            </div>
-          )}
+        <div className={`${borderStyle} ${borderColor} rounded-lg p-3`}>
+          {/* Show zones in a flexible grid that adjusts based on collapsed/expanded state */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {filteredZones.map(zone => (
+              <ZoneContainer 
+                key={zone.id} 
+                zone={zone} 
+                viewType={viewType}
+                zoomLevel={zoomLevel}
+              />
+            ))}
+            
+            {filteredZones.length === 0 && (
+              <div className="text-center py-8 text-gray-500 col-span-full">
+                <p>No zones match the selected filter.</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </Card>

@@ -1,5 +1,6 @@
 import { ZoneWithBins } from "@shared/schema";
 import BinCard from "./BinCard";
+import { useState } from "react";
 
 interface ZoneContainerProps {
   zone: ZoneWithBins;
@@ -8,6 +9,12 @@ interface ZoneContainerProps {
 }
 
 export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContainerProps) {
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  
+  const toggleExpand = () => {
+    setIsExpanded((prev: boolean) => !prev);
+  };
+  
   const zoomStyle = {
     fontSize: `${zoomLevel / 100}rem`,
   };
@@ -81,73 +88,112 @@ export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContain
   const faceTypeIcon = zone.faceType === "Pick" ? "🔍" : "🔋";
   
   return (
-    <div className={`border ${borderColor} rounded-lg mb-4 ${shadowColor} shadow-sm overflow-hidden`} style={zoomStyle}>
-      <div className={`${bgGradient} px-5 py-4 flex justify-between items-center`}>
-        <div className="flex items-center gap-3">
-          <div className={`bg-white/80 rounded-full h-8 w-8 flex items-center justify-center ${shadowColor} shadow-sm`}>
-            <span className="text-lg">{faceTypeIcon}</span>
+    <div 
+      className={`mb-4 ${isExpanded ? '' : 'cursor-pointer transform hover:scale-105 transition-all'}`}
+      style={zoomStyle}
+      onClick={toggleExpand}
+    >
+      {isExpanded ? (
+        // Expanded View
+        <div className={`border ${borderColor} rounded-lg ${shadowColor} shadow-sm overflow-hidden transition-all duration-300 ease-in-out`}>
+          <div className={`${bgGradient} px-5 py-4 flex justify-between items-center cursor-pointer`}>
+            <div className="flex items-center gap-3">
+              <div className={`bg-white/80 rounded-full h-8 w-8 flex items-center justify-center ${shadowColor} shadow-sm`}>
+                <span className="text-lg">{faceTypeIcon}</span>
+              </div>
+              <div>
+                <h3 className={`font-bold ${textColor}`}>{zone.name}</h3>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <span className={`text-xs px-2 py-0.5 ${bgGradient.replace('-50', '-100')} ${textColor} rounded-full font-medium`}>{zone.faceType}</span>
+                  <span className="text-xs text-gray-500">|</span>
+                  <span className="text-xs text-gray-600">{zone.bins.length} bins</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex flex-col items-end">
+              <div className={`text-sm font-bold ${textColor}`}>{zone.utilization}% utilized</div>
+              <div className="w-32 h-2 bg-gray-200 rounded-full mt-1 overflow-hidden">
+                <div 
+                  className={`h-full rounded-full ${getUtilizationColor(zone.utilization)}`}
+                  style={{ width: `${zone.utilization}%` }}
+                ></div>
+              </div>
+            </div>
           </div>
-          <div>
-            <h3 className={`font-bold ${textColor}`}>{zone.name}</h3>
-            <div className="flex items-center gap-2 mt-0.5">
-              <span className={`text-xs px-2 py-0.5 ${bgGradient.replace('-50', '-100')} ${textColor} rounded-full font-medium`}>{zone.faceType}</span>
-              <span className="text-xs text-gray-500">|</span>
-              <span className="text-xs text-gray-600">{zone.bins.length} bins</span>
+          
+          <div className="p-5 bg-white">
+            {viewType === "grid" ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {zone.bins.map(bin => (
+                  <BinCard key={bin.id} bin={bin} />
+                ))}
+              </div>
+            ) : (
+              <div className="divide-y divide-gray-100 rounded-lg border border-gray-100 overflow-hidden">
+                {zone.bins.map(bin => (
+                  <div key={bin.id} className="py-3 px-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <BinUtilizationIndicator utilizationPercent={bin.utilizationPercent} />
+                      <span className="font-medium text-gray-800">{bin.binId}</span>
+                      <span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-700 rounded-full font-medium">{bin.storageHUType}</span>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span className="text-sm font-medium text-gray-600">{bin.category}</span>
+                      <div className="px-2 py-1 bg-gray-50 rounded text-xs">
+                        <span className="text-gray-600">Vol: </span>
+                        <span className="font-medium">{bin.maxVolume}</span>
+                      </div>
+                      {bin.binPalletCapacity && (
+                        <div className="px-2 py-1 bg-gray-50 rounded text-xs">
+                          <span className="text-gray-600">Pallets: </span>
+                          <span className="font-medium">{bin.binPalletCapacity}</span>
+                        </div>
+                      )}
+                      <div className="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full ${getUtilizationColor(bin.utilizationPercent)}`}
+                          style={{ width: `${bin.utilizationPercent}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-sm font-bold">{bin.utilizationPercent}%</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      ) : (
+        // Collapsed Cube View
+        <div className={`${getUtilizationColor(zone.utilization).replace('bg-', 'border-')} border-2`}>
+          <div 
+            className={`${bgGradient.replace('-50', '-200')} aspect-square w-full rounded-lg shadow-md flex flex-col justify-between p-3 relative overflow-hidden`}
+          >
+            <div className="flex justify-between items-start">
+              <div className={`text-xs font-bold ${textColor}`}>{zone.name}</div>
+              <div className={`text-xs font-semibold ${textColor} bg-white/70 rounded-full px-1.5 py-0.5`}>
+                {zone.utilization}%
+              </div>
+            </div>
+            
+            <div className="mt-auto">
+              <div className="flex justify-between items-center">
+                <div className={`text-xs px-1.5 py-0.5 ${bgGradient.replace('-50', '-300')} ${textColor} rounded-sm font-medium`}>
+                  {zone.faceType}
+                </div>
+                <div className={`text-xs ${textColor}`}>{faceTypeIcon}</div>
+              </div>
+              <div className="mt-1 h-1 bg-gray-200 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full rounded-full ${getUtilizationColor(zone.utilization)}`}
+                  style={{ width: `${zone.utilization}%` }}
+                ></div>
+              </div>
             </div>
           </div>
         </div>
-        <div className="flex flex-col items-end">
-          <div className={`text-sm font-bold ${textColor}`}>{zone.utilization}% utilized</div>
-          <div className="w-32 h-2 bg-gray-200 rounded-full mt-1 overflow-hidden">
-            <div 
-              className={`h-full rounded-full ${getUtilizationColor(zone.utilization)}`}
-              style={{ width: `${zone.utilization}%` }}
-            ></div>
-          </div>
-        </div>
-      </div>
-      
-      <div className="p-5 bg-white">
-        {viewType === "grid" ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {zone.bins.map(bin => (
-              <BinCard key={bin.id} bin={bin} />
-            ))}
-          </div>
-        ) : (
-          <div className="divide-y divide-gray-100 rounded-lg border border-gray-100 overflow-hidden">
-            {zone.bins.map(bin => (
-              <div key={bin.id} className="py-3 px-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
-                <div className="flex items-center gap-3">
-                  <BinUtilizationIndicator utilizationPercent={bin.utilizationPercent} />
-                  <span className="font-medium text-gray-800">{bin.binId}</span>
-                  <span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-700 rounded-full font-medium">{bin.storageHUType}</span>
-                </div>
-                <div className="flex items-center gap-4">
-                  <span className="text-sm font-medium text-gray-600">{bin.category}</span>
-                  <div className="px-2 py-1 bg-gray-50 rounded text-xs">
-                    <span className="text-gray-600">Vol: </span>
-                    <span className="font-medium">{bin.maxVolume}</span>
-                  </div>
-                  {bin.binPalletCapacity && (
-                    <div className="px-2 py-1 bg-gray-50 rounded text-xs">
-                      <span className="text-gray-600">Pallets: </span>
-                      <span className="font-medium">{bin.binPalletCapacity}</span>
-                    </div>
-                  )}
-                  <div className="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full ${getUtilizationColor(bin.utilizationPercent)}`}
-                      style={{ width: `${bin.utilizationPercent}%` }}
-                    ></div>
-                  </div>
-                  <span className="text-sm font-bold">{bin.utilizationPercent}%</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 }
