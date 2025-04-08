@@ -154,11 +154,14 @@ export default function ZoneContainer({ zone, viewType, zoomLevel }: ZoneContain
                           <span className="font-medium">{bin.binPalletCapacity}</span>
                         </div>
                       )}
-                      <div className="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                        <div 
-                          className={`h-full ${getUtilizationColor(bin.utilizationPercent)}`}
-                          style={{ width: `${bin.utilizationPercent}%` }}
-                        ></div>
+                      <div className="flex items-center gap-2 min-w-[100px]">
+                        <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                          <div 
+                            className={`h-full ${getUtilizationColor(bin.utilizationPercent)}`}
+                            style={{ width: `${bin.utilizationPercent}%` }}
+                          ></div>
+                        </div>
+                        <span className="text-xs font-medium whitespace-nowrap">{bin.utilizationPercent}%</span>
                       </div>
                       </div>
                   </div>
