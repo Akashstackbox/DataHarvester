@@ -1,105 +1,47 @@
 import { Bin } from "@shared/schema";
 
-interface BinCardProps {
-  bin: Bin;
-}
-
-export default function BinCard({ bin }: BinCardProps) {
+export default function BinCard({ bin }: { bin: Bin }) {
   const { binId, utilizationPercent, category, maxVolume, storageHUType, binPalletCapacity, skuEligibility } = bin;
-  
-  // Determine color scheme based on utilization percentage
-  let bgGradient = "bg-gradient-to-br from-gray-100 to-gray-300";
-  let textColor = "text-gray-700";
-  let iconColor = "text-gray-400";
-  let progressColor = "bg-gray-400";
-  
-  if (utilizationPercent > 0) {
-    if (utilizationPercent <= 50) {
-      bgGradient = "bg-gradient-to-br from-green-50 to-green-200"; // Low utilization
-      textColor = "text-green-800";
-      iconColor = "text-green-600";
-      progressColor = "bg-green-500";
-    } else if (utilizationPercent <= 75) {
-      bgGradient = "bg-gradient-to-br from-amber-50 to-amber-200"; // Medium utilization
-      textColor = "text-amber-800";
-      iconColor = "text-amber-600";
-      progressColor = "bg-amber-500";
-    } else {
-      bgGradient = "bg-gradient-to-br from-red-50 to-red-200"; // High utilization
-      textColor = "text-red-800";
-      iconColor = "text-red-600";
-      progressColor = "bg-red-500";
-    }
-  }
-  
-  // Choose icon based on storage type
-  let storageIcon = "📦"; // default
-  if (storageHUType === "Pallet") storageIcon = "🔳";
-  if (storageHUType === "Carton") storageIcon = "📦";
-  if (storageHUType === "Crate") storageIcon = "🗄️";
-  
-  // Extract only the first word of the category for display
-  const firstWord = category 
-    ? category.split(' ')[0] 
-    : "Uncategorized";
-  
-  // Determine SKU eligibility marker
-  let eligibilityMarker = null;
-  let eligibilityColor = '';
-  
-  if (skuEligibility === 'AllEligible') {
-    eligibilityColor = 'bg-blue-500';
-  } else if (skuEligibility === 'MixedEligibility') {
-    eligibilityColor = 'bg-purple-500';
-  } else if (skuEligibility === 'AllIneligible') {
-    eligibilityColor = 'bg-red-500';
-  }
-  
+
+  const style = utilizationPercent > 75 
+    ? { bg: "from-red-50 to-red-200", text: "text-red-800", progress: "bg-red-500" }
+    : utilizationPercent > 50
+    ? { bg: "from-amber-50 to-amber-200", text: "text-amber-800", progress: "bg-amber-500" }
+    : utilizationPercent > 0
+    ? { bg: "from-green-50 to-green-200", text: "text-green-800", progress: "bg-green-500" }
+    : { bg: "from-gray-100 to-gray-300", text: "text-gray-700", progress: "bg-gray-400" };
+
+  const eligibilityColor = skuEligibility === 'AllEligible' ? 'bg-blue-500' 
+    : skuEligibility === 'MixedEligibility' ? 'bg-purple-500' 
+    : 'bg-red-500';
+
   return (
-    <div className={`${bgGradient} rounded-lg shadow-md overflow-hidden relative group hover:shadow-lg transition-all duration-300`}>
-      {/* SKU Eligibility indicator */}
-      <div className={`absolute top-0 right-0 w-2 h-2 ${eligibilityColor} rounded-full m-1 z-5`}></div>
+    <div className={`bg-gradient-to-br ${style.bg} rounded-lg shadow-md overflow-hidden relative group hover:shadow-lg transition-all duration-300`}>
+      <div className={`absolute top-0 right-0 w-2 h-2 ${eligibilityColor} rounded-full m-1`}></div>
       <div className="p-3">
         <div className="flex justify-between items-center">
-          <div className={`font-bold text-sm ${textColor}`}>{binId}</div>
-          <div className={`text-xs ${iconColor}`}>{storageIcon}</div>
+          <div className={`font-bold text-sm ${style.text}`}>{binId}</div>
+          <div className="text-xs">{storageHUType === "Pallet" ? "🔳" : "📦"}</div>
         </div>
-        
-        {/* Progress bar */}
         <div className="mt-2 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-          <div 
-            className={`h-full ${progressColor} rounded-full`} 
-            style={{ width: `${utilizationPercent}%` }}
-          ></div>
+          <div className={`h-full ${style.progress} rounded-full`} style={{width: `${utilizationPercent}%`}}></div>
         </div>
-        
-        <div className={`text-xs font-medium mt-1 ${textColor}`}>{utilizationPercent}% full</div>
+        <div className={`text-xs font-medium mt-1 ${style.text}`}>{utilizationPercent}% full</div>
       </div>
-      
-      {/* Ultra compact tooltip for small bins */}
-      <div className="absolute inset-0 bg-white/95 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center items-center p-0.5 text-center shadow-inner z-5">
-        <div className="text-xs font-bold text-primary leading-tight">{binId}</div>
-        <div className="text-[10px] font-semibold leading-tight mt-0.5">{utilizationPercent}%</div>
-        
-        <div className="flex flex-wrap justify-center gap-x-1 mt-0.5">
-          <div className="text-[10px] font-medium leading-tight px-1 bg-gray-100 rounded text-gray-700">{storageHUType}</div>
-          <div className="text-[10px] font-medium leading-tight">V:{maxVolume}</div>
-          {binPalletCapacity && (
-            <div className="text-[10px] font-medium leading-tight">P:{binPalletCapacity}</div>
-          )}
+      <div className="absolute inset-0 bg-white/95 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center items-center p-1 text-[10px] gap-0.5">
+        <div className="font-bold text-primary">{binId}</div>
+        <div className="font-semibold">{utilizationPercent}%</div>
+        <div className="flex gap-1 flex-wrap justify-center">
+          <span className="bg-gray-100 rounded px-1">{storageHUType}</span>
+          <span>V:{maxVolume}</span>
+          {binPalletCapacity && <span>P:{binPalletCapacity}</span>}
         </div>
-        
-        <div className="mt-0.5 text-[10px] font-medium bg-blue-100 text-blue-800 rounded px-1 py-px leading-tight w-full max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
-          {firstWord}
-        </div>
-        
-        {/* SKU Eligibility indicator in tooltip */}
-        <div className={`mt-0.5 text-[10px] font-medium rounded px-1 py-px leading-tight w-full flex items-center justify-center ${
+        <div className="bg-blue-100 text-blue-800 rounded px-1 truncate w-full text-center">{category?.split(' ')[0] || "Uncategorized"}</div>
+        <div className={`rounded px-1 w-full flex items-center justify-center gap-1 ${
           skuEligibility === 'AllEligible' ? 'bg-blue-100 text-blue-800' : 
           skuEligibility === 'MixedEligibility' ? 'bg-purple-100 text-purple-800' : 
-          'bg-red-100 text-red-800'
-        }`}>
-          <span className={`inline-block w-1.5 h-1.5 rounded-full mr-1 ${eligibilityColor}`}></span>
+          'bg-red-100 text-red-800'}`}>
+          <span className={`w-1.5 h-1.5 rounded-full ${eligibilityColor}`}></span>
           {skuEligibility === 'AllEligible' ? 'All Eligible' : 
            skuEligibility === 'MixedEligibility' ? 'Mixed SKUs' : 
            'All Ineligible'}
