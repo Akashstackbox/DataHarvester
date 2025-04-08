@@ -7,36 +7,72 @@ interface BinCardProps {
 export default function BinCard({ bin }: BinCardProps) {
   const { binId, utilizationPercent, category, maxVolume, storageHUType, binPalletCapacity } = bin;
   
-  // Determine background color based on utilization percentage
-  let bgColor = "bg-gray-200";
+  // Determine color scheme based on utilization percentage
+  let bgGradient = "bg-gradient-to-br from-gray-100 to-gray-300";
+  let textColor = "text-gray-700";
+  let iconColor = "text-gray-400";
+  let progressColor = "bg-gray-400";
   
   if (utilizationPercent > 0) {
     if (utilizationPercent <= 50) {
-      bgColor = "bg-[#4CAF50]"; // Low utilization (green)
+      bgGradient = "bg-gradient-to-br from-green-50 to-green-200"; // Low utilization
+      textColor = "text-green-800";
+      iconColor = "text-green-600";
+      progressColor = "bg-green-500";
     } else if (utilizationPercent <= 75) {
-      bgColor = "bg-[#FFC107]"; // Medium utilization (yellow)
+      bgGradient = "bg-gradient-to-br from-amber-50 to-amber-200"; // Medium utilization
+      textColor = "text-amber-800";
+      iconColor = "text-amber-600";
+      progressColor = "bg-amber-500";
     } else {
-      bgColor = "bg-[#F44336]"; // High utilization (red)
+      bgGradient = "bg-gradient-to-br from-red-50 to-red-200"; // High utilization
+      textColor = "text-red-800";
+      iconColor = "text-red-600";
+      progressColor = "bg-red-500";
     }
   }
   
+  // Choose icon based on storage type
+  let storageIcon = "📦"; // default
+  if (storageHUType === "Pallet") storageIcon = "🔳";
+  if (storageHUType === "Carton") storageIcon = "📦";
+  if (storageHUType === "Crate") storageIcon = "🗄️";
+  
   return (
-    <div className={`${bgColor} rounded-md shadow-sm overflow-hidden relative group`}>
+    <div className={`${bgGradient} rounded-lg shadow-md overflow-hidden relative group hover:shadow-lg transition-all duration-300`}>
       <div className="p-3">
-        <div className="font-medium text-sm">{binId}</div>
-        <div className="text-xs font-medium mt-1">{utilizationPercent}%</div>
+        <div className="flex justify-between items-center">
+          <div className={`font-bold text-sm ${textColor}`}>{binId}</div>
+          <div className={`text-xs ${iconColor}`}>{storageIcon}</div>
+        </div>
+        
+        {/* Progress bar */}
+        <div className="mt-2 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+          <div 
+            className={`h-full ${progressColor} rounded-full`} 
+            style={{ width: `${utilizationPercent}%` }}
+          ></div>
+        </div>
+        
+        <div className={`text-xs font-medium mt-1 ${textColor}`}>{utilizationPercent}% full</div>
       </div>
       
       {/* Enhanced tooltip that appears on hover with all bin details */}
-      <div className="absolute inset-0 bg-white/90 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center p-2 text-center">
-        <div className="text-xs font-medium">Bin {binId}</div>
-        <div className="text-xs mt-1">{utilizationPercent}% utilized</div>
-        <div className="text-xs mt-0.5">{storageHUType} Type</div>
-        <div className="text-xs mt-0.5">Vol: {maxVolume} units</div>
+      <div className="absolute inset-0 bg-white/95 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center items-center p-3 text-center shadow-inner">
+        <div className="text-sm font-bold text-primary mb-1">Bin {binId}</div>
+        <div className="text-xs font-medium">{utilizationPercent}% utilized</div>
+        <div className="bg-gray-100 rounded-full px-2 py-0.5 text-xs mt-1.5 font-medium">{storageHUType}</div>
+        <div className="text-xs mt-2 flex items-center">
+          <span className="font-medium mr-1">Volume:</span> {maxVolume} units
+        </div>
         {binPalletCapacity && (
-          <div className="text-xs mt-0.5">Pallet Cap: {binPalletCapacity}</div>
+          <div className="text-xs mt-1 flex items-center">
+            <span className="font-medium mr-1">Pallet Capacity:</span> {binPalletCapacity}
+          </div>
         )}
-        <div className="text-xs text-gray-500 mt-0.5">{category || "Uncategorized"}</div>
+        <div className="text-xs bg-blue-100 text-blue-800 rounded-full px-2 py-0.5 mt-2">
+          {category || "Uncategorized"}
+        </div>
       </div>
     </div>
   );
