@@ -9,13 +9,16 @@ export default function Home() {
   const [selectedArea, setSelectedArea] = useState<number>(1); // Default to first area (Inventory)
   
   const { data: warehouseData, isLoading: isLoadingWarehouse, refetch: refetchWarehouse } = useQuery<AreaWithZonesAndBins>({
-    queryKey: ['/api/warehouse/area', selectedArea],
+    queryKey: ['/api/warehouse'],
     queryFn: async () => {
-      const response = await fetch(`/api/warehouse/area/${selectedArea}`);
+      // Temporarily use the default warehouse data endpoint while debugging
+      const response = await fetch('/api/warehouse');
       if (!response.ok) {
         throw new Error('Failed to fetch warehouse data');
       }
-      return response.json();
+      const data = await response.json();
+      console.log("Fetched warehouse data:", data);
+      return data;
     }
   });
   
