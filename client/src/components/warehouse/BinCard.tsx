@@ -38,6 +38,11 @@ export default function BinCard({ bin }: BinCardProps) {
   if (storageHUType === "Carton") storageIcon = "📦";
   if (storageHUType === "Crate") storageIcon = "🗄️";
   
+  // For compact tooltips, shorten the category name if needed
+  const shortenedCategory = category && category.length > 10 
+    ? category.substring(0, 9) + "..." 
+    : category || "Uncategorized";
+  
   return (
     <div className={`${bgGradient} rounded-lg shadow-md overflow-hidden relative group hover:shadow-lg transition-all duration-300`}>
       <div className="p-3">
@@ -57,21 +62,21 @@ export default function BinCard({ bin }: BinCardProps) {
         <div className={`text-xs font-medium mt-1 ${textColor}`}>{utilizationPercent}% full</div>
       </div>
       
-      {/* Enhanced tooltip that appears on hover with all bin details - contained within the card */}
-      <div className="absolute inset-0 bg-white/95 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center items-center p-2 text-center shadow-inner z-10">
-        <div className="text-sm font-bold text-primary">{binId}</div>
-        <div className="text-xs font-medium">{utilizationPercent}% utilized</div>
-        <div className="bg-gray-100 rounded-full px-2 py-0.5 text-xs mt-1 font-medium text-gray-700">{storageHUType}</div>
-        <div className="text-xs mt-1 text-gray-700">
-          <span className="font-medium">Vol:</span> {maxVolume}
+      {/* Ultra compact tooltip for small bins */}
+      <div className="absolute inset-0 bg-white/95 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center items-center p-0.5 text-center shadow-inner z-10">
+        <div className="text-xs font-semibold text-primary leading-tight">{binId}</div>
+        <div className="text-[9px] leading-tight mt-0.5">{utilizationPercent}%</div>
+        
+        <div className="flex flex-wrap justify-center gap-x-1 mt-0.5">
+          <div className="text-[9px] leading-tight px-1 bg-gray-100 rounded text-gray-700">{storageHUType}</div>
+          <div className="text-[9px] leading-tight">V:{maxVolume}</div>
+          {binPalletCapacity && (
+            <div className="text-[9px] leading-tight">P:{binPalletCapacity}</div>
+          )}
         </div>
-        {binPalletCapacity && (
-          <div className="text-xs text-gray-700">
-            <span className="font-medium">Pallets:</span> {binPalletCapacity}
-          </div>
-        )}
-        <div className="text-xs bg-blue-100 text-blue-800 rounded-full px-2 py-0.5 mt-1 truncate max-w-full">
-          {category || "Uncategorized"}
+        
+        <div className="mt-0.5 text-[9px] bg-blue-100 text-blue-800 rounded px-1 py-px leading-tight w-full max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
+          {shortenedCategory}
         </div>
       </div>
     </div>
