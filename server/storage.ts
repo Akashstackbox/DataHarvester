@@ -165,7 +165,7 @@ export class MemStorage implements IStorage {
 
     // Create Zones for each area
     areaIds.forEach(({ id, name }) => {
-      for (let i = 1; i <= 4; i++) {
+      for (let i = 1; i <= 5; i++) { // Increased loop to 5 to include Z5
         const zone: Zone = {
           id: this.currentZoneId++,
           name: `Z${i}`,
