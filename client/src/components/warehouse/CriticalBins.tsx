@@ -36,10 +36,8 @@ export default function CriticalBins({ bins, isLoading }: CriticalBinsProps) {
                   indicatorColor = "bg-[#4CAF50]";
                 } else if (bin.utilizationPercent <= 75) {
                   indicatorColor = "bg-[#FFC107]";
-                } else if (bin.utilizationPercent <= 90) {
-                  indicatorColor = "bg-[#F44336]";
                 } else {
-                  indicatorColor = "bg-[#9C27B0]";
+                  indicatorColor = "bg-[#F44336]";
                 }
               }
               

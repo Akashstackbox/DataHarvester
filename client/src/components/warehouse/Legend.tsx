@@ -16,11 +16,7 @@ export default function Legend() {
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded-sm bg-[#F44336]"></div>
-            <span className="text-sm">High (76-90%)</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 rounded-sm bg-[#9C27B0]"></div>
-            <span className="text-sm">Very High (91-100%)</span>
+            <span className="text-sm">High (76-100%)</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded-sm bg-gray-200"></div>

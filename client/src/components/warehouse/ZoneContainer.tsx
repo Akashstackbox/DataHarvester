@@ -55,10 +55,8 @@ function BinUtilizationIndicator({ utilizationPercent }: { utilizationPercent: n
       bgColor = "bg-[#4CAF50]";
     } else if (utilizationPercent <= 75) {
       bgColor = "bg-[#FFC107]";
-    } else if (utilizationPercent <= 90) {
-      bgColor = "bg-[#F44336]";
     } else {
-      bgColor = "bg-[#9C27B0]";
+      bgColor = "bg-[#F44336]";
     }
   }
   

@@ -15,10 +15,8 @@ export default function BinCard({ bin }: BinCardProps) {
       bgColor = "bg-[#4CAF50]"; // Low utilization (green)
     } else if (utilizationPercent <= 75) {
       bgColor = "bg-[#FFC107]"; // Medium utilization (yellow)
-    } else if (utilizationPercent <= 90) {
-      bgColor = "bg-[#F44336]"; // High utilization (red)
     } else {
-      bgColor = "bg-[#9C27B0]"; // Very high utilization (purple)
+      bgColor = "bg-[#F44336]"; // High utilization (red)
     }
   }
   
