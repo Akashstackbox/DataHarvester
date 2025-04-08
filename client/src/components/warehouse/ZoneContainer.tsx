@@ -231,10 +231,9 @@ onMouseLeave={() => setShowStats(false)}>
             </div>
           )}
         </div>
-        <div>
-          {showStats && (
-            <div className="absolute -top-24 left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-lg p-2 z-10 w-48">
-              <div className="text-xs space-y-1">
+        {showStats && (
+          <div className="absolute -top-24 left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-lg p-2 z-10 w-48">
+            <div className="text-xs space-y-1">
               <div className="flex justify-between">
                 <span>Avg Util:</span>
                 <span className="font-medium">{zone.utilization}%</span>
