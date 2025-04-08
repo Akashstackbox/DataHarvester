@@ -19,6 +19,7 @@ import AreaContainer from "./AreaContainer";
 import UtilizationSummary from "./UtilizationSummary";
 import CategoryDistributionChart from "./CategoryDistribution";
 import CriticalBins from "./CriticalBins";
+import TimeBasedHeatmap from "./TimeBasedHeatmap";
 
 interface WarehouseDashboardProps {
   warehouseData?: AreaWithZonesAndBins;
@@ -260,6 +261,11 @@ export default function WarehouseDashboard({
                 </Button>
               </Card>
             )}
+          </div>
+          
+          {/* Time-based Heatmap */}
+          <div className="mb-6">
+            <TimeBasedHeatmap isLoading={isLoading} />
           </div>
           
           {/* Analytics */}
