@@ -231,6 +231,7 @@ onMouseLeave={() => setShowStats(false)}>
             </div>
           )}
         </div>
+        {/* Quick stats tooltip */}
         {showStats && (
           <div className="absolute -top-24 left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-lg p-2 z-10 w-48">
             <div className="text-xs space-y-1">
