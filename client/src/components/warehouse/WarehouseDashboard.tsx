@@ -140,8 +140,8 @@ export default function WarehouseDashboard({
       {/* Main Content */}
       <main className="flex-grow p-4 md:p-6 pb-8">
         <div className="max-w-7xl mx-auto">
-          {/* Controls */}
-          <div className="mb-6 p-4 bg-white rounded-lg shadow-sm border border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          {/* Controls - Sticky */}
+          <div className="sticky top-[73px] z-10 mb-6 p-4 bg-white rounded-lg shadow-md border border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="flex flex-wrap items-center gap-3">
               <div className="flex bg-gray-100 p-1 rounded-lg shadow-inner">
                 <Button
