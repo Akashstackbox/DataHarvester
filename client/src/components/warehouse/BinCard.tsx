@@ -57,20 +57,20 @@ export default function BinCard({ bin }: BinCardProps) {
         <div className={`text-xs font-medium mt-1 ${textColor}`}>{utilizationPercent}% full</div>
       </div>
       
-      {/* Enhanced tooltip that appears on hover with all bin details */}
-      <div className="absolute inset-0 bg-white/95 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center items-center p-3 text-center shadow-inner">
-        <div className="text-sm font-bold text-primary mb-1">Bin {binId}</div>
+      {/* Enhanced tooltip that appears on hover with all bin details - contained within the card */}
+      <div className="absolute inset-0 bg-white/95 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center items-center p-2 text-center shadow-inner z-10">
+        <div className="text-sm font-bold text-primary">{binId}</div>
         <div className="text-xs font-medium">{utilizationPercent}% utilized</div>
-        <div className="bg-gray-100 rounded-full px-2 py-0.5 text-xs mt-1.5 font-medium">{storageHUType}</div>
-        <div className="text-xs mt-2 flex items-center">
-          <span className="font-medium mr-1">Volume:</span> {maxVolume} units
+        <div className="bg-gray-100 rounded-full px-2 py-0.5 text-xs mt-1 font-medium text-gray-700">{storageHUType}</div>
+        <div className="text-xs mt-1 text-gray-700">
+          <span className="font-medium">Vol:</span> {maxVolume}
         </div>
         {binPalletCapacity && (
-          <div className="text-xs mt-1 flex items-center">
-            <span className="font-medium mr-1">Pallet Capacity:</span> {binPalletCapacity}
+          <div className="text-xs text-gray-700">
+            <span className="font-medium">Pallets:</span> {binPalletCapacity}
           </div>
         )}
-        <div className="text-xs bg-blue-100 text-blue-800 rounded-full px-2 py-0.5 mt-2">
+        <div className="text-xs bg-blue-100 text-blue-800 rounded-full px-2 py-0.5 mt-1 truncate max-w-full">
           {category || "Uncategorized"}
         </div>
       </div>
